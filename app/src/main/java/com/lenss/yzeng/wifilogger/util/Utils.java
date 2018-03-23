@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -30,6 +31,12 @@ import java.util.Locale;
  */
 
 public class Utils {
+    public static String convertTime(long time){
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        return format.format(date);
+    }
+
     public static String getCurrentSsid(Context context) {
         String ssid = null;
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

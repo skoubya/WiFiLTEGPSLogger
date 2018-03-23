@@ -50,6 +50,7 @@ public class WiFiLogService extends Service {
     FileOutputStream fout = null;
     OutputStreamWriter out = null;
     String fileName = null;
+    BroadcastReceiver wifiScanReceiver = null;
 
     public WiFiLogService(){
         super();
@@ -72,8 +73,8 @@ public class WiFiLogService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Notification notification = new Notification();
-        startForeground(101, notification);
+        //Notification notification = new Notification();
+        //startForeground(101, notification);
 
         Thread logTh = new Thread(new Runnable() {
             @Override
@@ -133,7 +134,7 @@ public class WiFiLogService extends Service {
 
             wifiManager.startScan();
             // Registering Wifi Receiver
-            BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+            wifiScanReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context c, Intent intent) {
                     retrieveResults();
@@ -191,7 +192,13 @@ public class WiFiLogService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
-
+        try {
+            this.out.close();
+            this.fout.close();
+            getApplicationContext().unregisterReceiver(wifiScanReceiver);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Nullable
