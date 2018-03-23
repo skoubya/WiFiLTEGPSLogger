@@ -1,14 +1,22 @@
 package com.lenss.yzeng.wifilogger;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.widget.TextView;
 
 import com.lenss.yzeng.wifilogger.util.Utils;
@@ -25,15 +33,17 @@ import java.util.Date;
  * Created by yukun on 3/22/2018.
  */
 
-public class SensorLogService extends Service implements SensorEventListener2 {
+public class SensorLogService extends Service implements SensorEventListener2, LocationListener{
     SensorManager manager = null;
     String fileName = "sensor_log_";
     String filePath = "/Movies/";
     FileOutputStream fout = null;
     OutputStreamWriter writer = null;
+    LocationManager locationManager = null;
     @Override
     public void onCreate(){
         manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         fileName = fileName + timestamp + ".csv";
         try{
@@ -45,6 +55,18 @@ public class SensorLogService extends Service implements SensorEventListener2 {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+            //do your check here
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(this.getBaseContext().getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("Permission denied!");
+                    return super.onStartCommand(intent, flags, startId);
+                }
+            }
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, SensorLogService.this);
+
         manager.registerListener(SensorLogService.this,
                 manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         manager.registerListener(SensorLogService.this,
@@ -142,6 +164,32 @@ public class SensorLogService extends Service implements SensorEventListener2 {
 
     @Override
     public void onFlushCompleted(Sensor sensor) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        try{
+            writer.write(String.format("%s; LAT; %f; LONG; %f; SPEED; %f; ALT; %f\n", timestamp, location.getLatitude(), location.getLongitude(),
+                location.getSpeed(), location.getAltitude()));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }
