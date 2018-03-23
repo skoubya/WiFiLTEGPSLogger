@@ -59,6 +59,15 @@ public class SensorLogService extends Service implements SensorEventListener2 {
                 manager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
         manager.registerListener(SensorLogService.this,
                 manager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+        // new sensing capability
+        manager.registerListener(SensorLogService.this,
+                manager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE), SensorManager.SENSOR_DELAY_NORMAL);
+        manager.registerListener(SensorLogService.this,
+                manager.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_NORMAL);
+        manager.registerListener(SensorLogService.this,
+                manager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_NORMAL);
+        manager.registerListener(SensorLogService.this,
+                manager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
         return super.onStartCommand(intent, flags, startId);
     }
     @Override
@@ -100,6 +109,18 @@ public class SensorLogService extends Service implements SensorEventListener2 {
                     break;
                 case Sensor.TYPE_GAME_ROTATION_VECTOR:
                     writer.write(String.format("%s; GAME_ROT; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f));
+                    break;
+                case  Sensor.TYPE_AMBIENT_TEMPERATURE:
+                    writer.write(String.format("%s; TEMP; %f; \n", timestamp, evt.values[0]));
+                    break;
+                case  Sensor.TYPE_LIGHT:
+                    writer.write(String.format("%s; LIGHT; %f; \n", timestamp, evt.values[0]));
+                    break;
+                case  Sensor.TYPE_PRESSURE:
+                    writer.write(String.format("%s; PRESSURE; %f;\n", timestamp, evt.values[0]));
+                    break;
+                case  Sensor.TYPE_PROXIMITY:
+                    writer.write(String.format("%s; PROXIMITY; %f;\n", timestamp, evt.values[0]));
                     break;
             }
             writer.flush();
