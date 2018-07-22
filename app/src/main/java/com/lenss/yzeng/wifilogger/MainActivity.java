@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +37,15 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener2 {
 
-    private Button startbtn;
-    private Button stopbtn;
-    private Button testBtn;
-    private Button button2;
+    private Button startWifiBtn;
+    private Button stopWifiBtn;
+    private Button startSenseBtn;
+    private Button stopSenseBtn;
+    private Button startLteBtn;
+    private Button stopLteBtn;
+    private TextView intervalTextView;
+    private TextView intervalEditView;
+    private Button setFreqBtn;
     private static int count = 0;
 
     private TextView mag_data;
@@ -66,84 +72,98 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         .setAction("Action", null).show();
             }
         });
-        startbtn = findViewById(R.id.startBtn);
+        startWifiBtn = (Button)findViewById(R.id.startWifiBtn);
+        stopWifiBtn = (Button)findViewById(R.id.stopWifiBtn);
+        stopWifiBtn.setEnabled(false);
 
-        stopbtn = findViewById(R.id.stopBtn);
-        //stopbtn.setVisibility(View.GONE);
-        testBtn = findViewById(R.id.test);
-        button2 = findViewById(R.id.button2);
+        startSenseBtn = (Button)findViewById(R.id.startSenseBtn);
+        stopSenseBtn = (Button)findViewById(R.id.stopSenseBtn);
+        stopSenseBtn.setEnabled(false);
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        startLteBtn = (Button)findViewById(R.id.startLteBtn);
+        stopLteBtn = (Button)findViewById(R.id.stopLteBtn);
+        stopLteBtn.setEnabled(false);
+
+        setFreqBtn=(Button)findViewById(R.id.setFreqBtn);
+        setFreqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "stopping the sensor service thread", Toast.LENGTH_SHORT).show();
-                stopService(new Intent(MainActivity.this, SensorLogService.class));
+                intervalTextView.setText(intervalEditView.getText());
+                Toast.makeText(MainActivity.this, "logging interval set to "+intervalTextView.getText(), Toast.LENGTH_SHORT);
             }
         });
+
+        intervalTextView=(TextView)findViewById(R.id.intervalTextView);
+        intervalEditView=(EditText)findViewById(R.id.editFreqText);
 
         mag_data = ((TextView)findViewById(R.id.mag_data));
         mag_data.setText("mag data here");
         acc_data = ((TextView)findViewById(R.id.acc_data));
         acc_data.setText("acc data here");
 
-        startbtn.setOnClickListener(new View.OnClickListener(){
+        startWifiBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(MainActivity.this, "entering the service thread!", Toast.LENGTH_SHORT).show();
-                startService(new Intent(MainActivity.this, WiFiLogService.class));
-//                fOut = setupFile();
-//                if (fOut == null){
-//                    Toast.makeText(MainActivity.this, "get a null fOut!", Toast.LENGTH_SHORT);
-//                    System.out.println("get a null fOut!");
-//                }
-//                myOutWriter = new OutputStreamWriter(fOut);
-//
-//                logger = new WifiLogger(myOutWriter);
-//                Toast.makeText(MainActivity.this, "starting the service thread", Toast.LENGTH_SHORT).show();
-//                logger.start();
-                //startbtn.setVisibility(View.GONE);
-                //stopbtn.setVisibility(View.VISIBLE);
+                Toast.makeText(MainActivity.this, "entering wifi logging thread!", Toast.LENGTH_SHORT).show();
+                Intent serviceIntent=new Intent(MainActivity.this, WiFiLogService.class);
+                serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
+                startService(serviceIntent);
+                startWifiBtn.setEnabled(false);
+                stopWifiBtn.setEnabled(true);
             }
         });
 
-        stopbtn.setOnClickListener(new View.OnClickListener(){
+        stopWifiBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "stopping the service thread", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "stopping wifi logging thread", Toast.LENGTH_SHORT).show();
                 stopService(new Intent(MainActivity.this, WiFiLogService.class));
-//                logger.interrupt();
-//
-//                try {
-//                    myOutWriter.flush();
-//                    myOutWriter.close();
-//                    fOut.flush();
-//                    fOut.close();
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-//
-                //startbtn.setVisibility(View.VISIBLE);
-                //stopbtn.setVisibility(View.GONE);
+                stopWifiBtn.setEnabled(false);
+                startWifiBtn.setEnabled(true);
             }
         });
 
-        testBtn.setOnClickListener(new View.OnClickListener() {
+        startSenseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // start a service
-                Toast.makeText(MainActivity.this, "entering the sensor service thread!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "entering sensor logging thread!", Toast.LENGTH_SHORT).show();
                 startService(new Intent(MainActivity.this, SensorLogService.class));
-                // call main activity handler and show them in ui
-//                isRunning = true;
-//
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_NORMAL);
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED), SensorManager.SENSOR_DELAY_NORMAL);
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED), SensorManager.SENSOR_DELAY_NORMAL);
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
-//                manager.registerListener(MainActivity.this, manager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
+                startSenseBtn.setEnabled(false);
+                stopSenseBtn.setEnabled(true);
+            }
+        });
+
+        stopSenseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "stopping the sensor service thread", Toast.LENGTH_SHORT).show();
+                stopService(new Intent(MainActivity.this, SensorLogService.class));
+                stopSenseBtn.setEnabled(false);
+                startSenseBtn.setEnabled(true);
+            }
+        });
+
+        startLteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(MainActivity.this, "starting lte logging service thread", Toast.LENGTH_SHORT).show();
+                Intent serviceIntent=new Intent(MainActivity.this, LteLogService.class);
+                serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
+                startService(serviceIntent);
+                startLteBtn.setEnabled(false);
+                stopLteBtn.setEnabled(true);
+            }
+        });
+
+        stopLteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(MainActivity.this, "stopping lte logging service thread", Toast.LENGTH_SHORT).show();
+                stopService(new Intent(MainActivity.this, LteLogService.class));
+                stopLteBtn.setEnabled(false);
+                startLteBtn.setEnabled(true);
             }
         });
     }

@@ -13,9 +13,15 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoLte;
+import android.telephony.CellSignalStrength;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.lenss.yzeng.wifilogger.util.Utils;
@@ -51,6 +57,7 @@ public class WiFiLogService extends Service {
     OutputStreamWriter out = null;
     String fileName = null;
     BroadcastReceiver wifiScanReceiver = null;
+    int interval=5000;
 
     public WiFiLogService(){
         super();
@@ -75,6 +82,9 @@ public class WiFiLogService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Notification notification = new Notification();
         //startForeground(101, notification);
+        Bundle extras=intent.getExtras();
+        this.interval=Integer.valueOf(extras.get("interval").toString());
+        Toast.makeText(this, "wifi logging service starting with interval "+this.interval+"ms", Toast.LENGTH_SHORT).show();
 
         Thread logTh = new Thread(new Runnable() {
             @Override
@@ -83,7 +93,7 @@ public class WiFiLogService extends Service {
                     System.out.println("lalala");
                     performWiFiScan();
                     try{
-                        sleep(5000);
+                        sleep(interval);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -98,7 +108,6 @@ public class WiFiLogService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
         this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
