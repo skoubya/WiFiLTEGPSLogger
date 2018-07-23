@@ -8,225 +8,213 @@
     tools:context="com.lenss.yzeng.wifilogger.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:id="@+id/startWifiBtn"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/btnLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/startWifiBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Start WiFi Sensing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/stopWifiBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Stop WiFi Sensing"
+            app:layout_constraintStart_toEndOf="@+id/startWifiBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/startSenseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Start Sensing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startWifiBtn" />
+
+
+        <Button
+            android:id="@+id/stopSenseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Stop Sensing"
+            app:layout_constraintStart_toEndOf="@+id/startSenseBtn"
+            app:layout_constraintTop_toBottomOf="@+id/stopWifiBtn" />
+
+        <Button
+            android:id="@+id/startLteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Start LTE Logging"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startSenseBtn"/>
+
+        <Button
+            android:id="@+id/stopLteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Stop LTE Logging"
+            app:layout_constraintStart_toEndOf="@+id/startLteBtn"
+            app:layout_constraintTop_toBottomOf="@+id/stopSenseBtn" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/intervalLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Start WiFi Sensing"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnLayout">
+        <TextView
+            android:id="@+id/freqLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Current logging interval: "
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/stopWifiBtn"
+        <TextView
+            android:id="@+id/intervalTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="5000"
+            app:layout_constraintStart_toEndOf="@+id/freqLabel" />
+
+        <EditText
+            android:id="@+id/editFreqText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:inputType="number"
+            android:text="10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/freqLabel" />
+
+        <Button
+            android:id="@+id/setFreqBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Set logging interval (ms)"
+            app:layout_constraintStart_toEndOf="@id/editFreqText"
+            app:layout_constraintTop_toBottomOf="@+id/intervalTextView" />
+    </android.support.constraint.ConstraintLayout>
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:id="@+id/guideline"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--app:layout_constraintGuide_begin="20dp" />-->
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/pingLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Stop WiFi Sensing"
-        app:layout_constraintStart_toEndOf="@+id/startWifiBtn"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/intervalLayout">
 
-    <Button
-        android:id="@+id/startSenseBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Start Sensing"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startWifiBtn" />
+        <TextView
+            android:id="@+id/hostLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Target PING Host: "
+            app:layout_constraintStart_toStartOf="parent"/>
 
+        <TextView
+            android:id="@+id/hostText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="192.168.1.1"
+            app:layout_constraintStart_toEndOf="@+id/hostLabel"/>
 
-    <Button
-        android:id="@+id/stopSenseBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Stop Sensing"
-        app:layout_constraintStart_toEndOf="@+id/startSenseBtn"
-        app:layout_constraintTop_toBottomOf="@+id/stopWifiBtn" />
+        <TextView
+            android:id="@+id/pingNumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="# of PINGs: "
+            app:layout_constraintStart_toEndOf="@+id/hostText"/>
 
-    <Button
-        android:id="@+id/startLteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Start LTE Logging"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startSenseBtn"/>
+        <TextView
+            android:id="@+id/pingNumText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="5"
+            app:layout_constraintStart_toEndOf="@+id/pingNumLabel" />
 
-    <Button
-        android:id="@+id/stopLteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Stop LTE Logging"
-        app:layout_constraintStart_toEndOf="@+id/startLteBtn"
-        app:layout_constraintTop_toBottomOf="@+id/stopSenseBtn" />
+        <Button
+            android:id="@+id/pingBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Ping"
+            app:layout_constraintStart_toEndOf="@+id/pingNumText"/>
 
-    <TextView
-        android:id="@+id/freqLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Current logging interval: "
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startLteBtn" />
-
-    <TextView
-        android:id="@+id/intervalTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="5000"
-        app:layout_constraintStart_toEndOf="@+id/freqLabel"
-        app:layout_constraintTop_toBottomOf="@+id/stopLteBtn" />
+    </android.support.constraint.ConstraintLayout>
 
     <EditText
-        android:id="@+id/editFreqText"
-        android:layout_width="49dp"
+        android:id="@+id/editUrlText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="192.168.1.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pingLayout" />
+
+    <EditText
+        android:id="@+id/editNumText"
+        android:layout_width="28dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/freqLabel" />
+        android:text="5"
+        app:layout_constraintStart_toEndOf="@+id/editUrlText"
+        app:layout_constraintTop_toBottomOf="@+id/pingLayout" />
 
     <Button
-        android:id="@+id/setFreqBtn"
+        android:id="@+id/setPingBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Set logging interval (ms)"
-        app:layout_constraintStart_toEndOf="@id/editFreqText"
-        app:layout_constraintTop_toBottomOf="@+id/intervalTextView" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editFreqText">
-
-        <TextView
-            android:id="@+id/acc_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/gyro_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="gyro" />
-
-        <TextView
-            android:id="@+id/gyro_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/gyro_uncal_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="gyro_uncal" />
-
-        <TextView
-            android:id="@+id/gyro_uncal_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/rot_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="rot" />
-
-        <TextView
-            android:id="@+id/rot_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/rot_game_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="game rot" />
-
-        <TextView
-            android:id="@+id/rot_game_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/mag_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mag" />
-
-        <TextView
-            android:id="@+id/mag_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/mag_uncal_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mag uncal" />
-
-        <TextView
-            android:id="@+id/mag_uncal_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/testView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-    </LinearLayout>
+        android:text="Set Ping"
+        app:layout_constraintStart_toEndOf="@+id/editNumText"
+        app:layout_constraintTop_toBottomOf="@+id/pingLayout"/>
 
 </android.support.constraint.ConstraintLayout>

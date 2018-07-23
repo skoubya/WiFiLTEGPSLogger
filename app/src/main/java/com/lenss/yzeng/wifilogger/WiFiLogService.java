@@ -51,13 +51,14 @@ import static java.lang.Thread.sleep;
  */
 
 public class WiFiLogService extends Service {
-    WifiManager wifiManager = null;
+    private WifiManager wifiManager = null;
 
-    FileOutputStream fout = null;
-    OutputStreamWriter out = null;
-    String fileName = null;
-    BroadcastReceiver wifiScanReceiver = null;
-    int interval=5000;
+    private FileOutputStream fout = null;
+    private OutputStreamWriter out = null;
+    private String fileName = null;
+    private BroadcastReceiver wifiScanReceiver = null;
+    private int interval=5000;
+    private Thread logTh;
 
     public WiFiLogService(){
         super();
@@ -78,6 +79,22 @@ public class WiFiLogService extends Service {
 //        }
 //    }
 
+    public class WifiLogger extends Thread{
+        @Override
+        public void run() {
+            while (!this.isInterrupted()){
+                System.out.println("lalala");
+                performWiFiScan();
+                try{
+                    sleep(interval);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Notification notification = new Notification();
@@ -86,21 +103,9 @@ public class WiFiLogService extends Service {
         this.interval=Integer.valueOf(extras.get("interval").toString());
         Toast.makeText(this, "wifi logging service starting with interval "+this.interval+"ms", Toast.LENGTH_SHORT).show();
 
-        Thread logTh = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    System.out.println("lalala");
-                    performWiFiScan();
-                    try{
-                        sleep(interval);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        logTh.start();
+        //logTh = new WifiLogger();
+        //logTh.start();
+        performWiFiScan();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -158,9 +163,6 @@ public class WiFiLogService extends Service {
         } catch (Exception e) {
             // critical error: set to no results and do not die
         }
-
-
-
     }
 
     public void retrieveResults(){
@@ -201,10 +203,13 @@ public class WiFiLogService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        //if(logTh==null){
+        //    this.logTh.interrupt();
+        //}
         try {
-            this.out.close();
-            this.fout.close();
             getApplicationContext().unregisterReceiver(wifiScanReceiver);
+            this.fout.close();
+            this.out.close();
         }catch (IOException e){
             e.printStackTrace();
         }

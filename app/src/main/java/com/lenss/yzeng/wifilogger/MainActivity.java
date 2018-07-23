@@ -28,24 +28,22 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener2 {
 
-    private Button startWifiBtn;
-    private Button stopWifiBtn;
-    private Button startSenseBtn;
-    private Button stopSenseBtn;
-    private Button startLteBtn;
-    private Button stopLteBtn;
-    private TextView intervalTextView;
+    private Button startSenseBtn, startWifiBtn, stopWifiBtn, stopSenseBtn, startLteBtn;
+    private Button stopLteBtn, setPingBtn, pingBtn, setFreqBtn;
+    private TextView intervalTextView, hostText, pingNumText;
     private TextView intervalEditView;
-    private Button setFreqBtn;
+    private EditText editUrl, editPingNum;
     private static int count = 0;
 
     private TextView mag_data;
@@ -55,6 +53,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static String acc, gyro_uncal, gyro, mag, mag_uncal, rot, game_rot;
 
     SensorManager manager;
+
+    public String ping(String url, String count) {
+        String str = "";
+        try {
+            Process process = Runtime.getRuntime().exec(
+                    "/system/bin/ping -c "+count+" "+ url);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    process.getInputStream()));
+            int i;
+            char[] buffer = new char[4096];
+            StringBuffer output = new StringBuffer();
+            while ((i = reader.read(buffer)) > 0)
+                output.append(buffer, 0, i);
+            reader.close();
+
+            // body.append(output.toString()+"\n");
+            str = output.toString();
+            // Log.d(TAG, str);
+        } catch (IOException e) {
+            // body.append("Error\n");
+            e.printStackTrace();
+        }
+        return str;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +94,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         .setAction("Action", null).show();
             }
         });
+
+        hostText=findViewById(R.id.hostText);
+        pingNumText=findViewById(R.id.pingNumText);
+        editUrl=findViewById(R.id.editUrlText);
+        editPingNum=findViewById(R.id.editNumText);
+        setPingBtn=findViewById(R.id.setPingBtn);
+        pingBtn=findViewById(R.id.pingBtn);
+        setPingBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                String pingHost=editUrl.getText().toString(),
+                pingNum=editPingNum.getText().toString();
+                Toast.makeText(MainActivity.this, "ping host: "+pingHost+" for "+pingNum+" times", Toast.LENGTH_SHORT);
+                hostText.setText(pingHost);
+                pingNumText.setText(pingNum);
+            }
+        });
+        pingBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Toast.makeText(MainActivity.this, "pinging!!!", Toast.LENGTH_SHORT);
+                ping(hostText.getText().toString(), pingNumText.getText().toString());
+            }
+        });
+
         startWifiBtn = (Button)findViewById(R.id.startWifiBtn);
         stopWifiBtn = (Button)findViewById(R.id.stopWifiBtn);
         stopWifiBtn.setEnabled(false);
@@ -95,11 +140,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         intervalTextView=(TextView)findViewById(R.id.intervalTextView);
         intervalEditView=(EditText)findViewById(R.id.editFreqText);
-
-        mag_data = ((TextView)findViewById(R.id.mag_data));
-        mag_data.setText("mag data here");
-        acc_data = ((TextView)findViewById(R.id.acc_data));
-        acc_data.setText("acc data here");
 
         startWifiBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -160,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         stopLteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Toast.makeText(MainActivity.this, "stopping lte logging service thread", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "stopping lte logging service", Toast.LENGTH_SHORT).show();
                 stopService(new Intent(MainActivity.this, LteLogService.class));
                 stopLteBtn.setEnabled(false);
                 startLteBtn.setEnabled(true);
@@ -184,11 +224,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         break;
                     case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
                         gyro_uncal = String.format("%d; GYRO_UN; %f; %f; %f; %f; %f; %f\n", evt.timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], evt.values[4], evt.values[5]);
-                        ((TextView)findViewById(R.id.gyro_uncal_data)).setText(gyro_uncal);
+                        //((TextView)findViewById(R.id.gyro_uncal_data)).setText(gyro_uncal);
                         break;
                     case Sensor.TYPE_GYROSCOPE:
                         gyro = String.format("%d; GYRO; %f; %f; %f; %f; %f; %f\n", evt.timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f);
-                        ((TextView)findViewById(R.id.gyro_data)).setText(gyro);
+                        //((TextView)findViewById(R.id.gyro_data)).setText(gyro);
                         break;
                     case Sensor.TYPE_MAGNETIC_FIELD:
                         mag = String.format("%d; MAG; %f; %f; %f; %f; %f; %f\n", evt.timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f);
@@ -196,15 +236,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         break;
                     case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
                         mag_uncal = String.format("%d; MAG_UN; %f; %f; %f; %f; %f; %f\n", evt.timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f);
-                        ((TextView)findViewById(R.id.mag_uncal_data)).setText(mag_uncal);
+                        //((TextView)findViewById(R.id.mag_uncal_data)).setText(mag_uncal);
                         break;
                     case Sensor.TYPE_ROTATION_VECTOR:
                         rot = String.format("%d; ROT; %f; %f; %f; %f; %f; %f\n", evt.timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f);
-                        ((TextView)findViewById(R.id.rot_data)).setText(rot);
+                        //((TextView)findViewById(R.id.rot_data)).setText(rot);
                         break;
                     case Sensor.TYPE_GAME_ROTATION_VECTOR:
                         game_rot = String.format("%d; GAME_ROT; %f; %f; %f; %f; %f; %f\n", evt.timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f);
-                        ((TextView)findViewById(R.id.rot_game_data)).setText(game_rot);
+                        //((TextView)findViewById(R.id.rot_game_data)).setText(game_rot);
                         break;
                 }
 

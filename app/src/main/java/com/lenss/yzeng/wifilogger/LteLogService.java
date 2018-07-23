@@ -32,6 +32,7 @@ public class LteLogService extends Service {
     FileOutputStream fout=null;
     OutputStreamWriter out=null;
     int interval=5000;
+    Thread logTh=null;
 
     public LteLogService() {
     }
@@ -47,6 +48,29 @@ public class LteLogService extends Service {
         this.out = new OutputStreamWriter(fout);
     }
 
+    public class LteLogger extends Thread{
+        @Override
+        public void run() {
+            while (!this.isInterrupted()){
+                int dbm=collectLteLog();
+                String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                try{
+                    out.append(timestamp+"|"+dbm+"\n");
+                    out.flush();
+                    fout.flush();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                try{
+                    sleep(interval);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Notification notification = new Notification();
@@ -55,28 +79,7 @@ public class LteLogService extends Service {
         this.interval=Integer.valueOf(extras.get("interval").toString());
         Toast.makeText(this, "lte logging service starting with interval "+this.interval+"ms", Toast.LENGTH_SHORT).show();
 
-        Thread logTh = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    System.out.println("starting lte logging thread");
-                    int dbm=collectLteLog();
-                    String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    try{
-                        out.append(timestamp+"|"+dbm+"\n");
-                        out.flush();
-                        fout.flush();
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-                    try{
-                        sleep(interval);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        logTh = new LteLogger();
         logTh.start();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -107,5 +110,19 @@ public class LteLogService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public void onDestroy(){
+        if(this.logTh!=null){
+            this.logTh.interrupt();
+            Toast.makeText(this, "stopped lte logging thread!", Toast.LENGTH_SHORT).show();
+        }
+        try {
+            this.fout.close();
+            this.out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
