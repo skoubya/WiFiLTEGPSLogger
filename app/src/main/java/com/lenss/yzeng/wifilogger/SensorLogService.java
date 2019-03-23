@@ -36,7 +36,7 @@ import java.util.Date;
 public class SensorLogService extends Service implements SensorEventListener2, LocationListener{
     SensorManager manager = null;
     String fileName = "sensor_log_";
-    String filePath = "/Movies/";
+    String filePath = "/distressnet/MStorm/WiFiLogger/";
     FileOutputStream fout = null;
     OutputStreamWriter writer = null;
     LocationManager locationManager = null;
@@ -45,7 +45,7 @@ public class SensorLogService extends Service implements SensorEventListener2, L
         manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        fileName = fileName + timestamp + ".csv";
+        fileName = fileName + timestamp + ".log";
         try{
             fout = Utils.setupFile(this,filePath, fileName);
             writer = new OutputStreamWriter(fout);
@@ -65,7 +65,7 @@ public class SensorLogService extends Service implements SensorEventListener2, L
                 }
             }
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, SensorLogService.this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, SensorLogService.this);
 
         manager.registerListener(SensorLogService.this,
                 manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -97,7 +97,9 @@ public class SensorLogService extends Service implements SensorEventListener2, L
         super.onDestroy();
         try {
             this.writer.close();
+            writer = null;
             this.fout.close();
+            fout = null;
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -109,46 +111,48 @@ public class SensorLogService extends Service implements SensorEventListener2, L
 
         //long real_stamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         //String timestamp = Utils.convertTime(real_stamp);
-        try {
-            switch(evt.sensor.getType()) {
-                case Sensor.TYPE_ACCELEROMETER:
-                    writer.write(String.format("%s; ACC; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
-                    break;
-                case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
-                    writer.write(String.format("%s; GYRO_UN; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], evt.values[4], evt.values[5]));
-                    break;
-                case Sensor.TYPE_GYROSCOPE:
-                    writer.write(String.format("%s; GYRO; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
-                    break;
-                case Sensor.TYPE_MAGNETIC_FIELD:
-                    writer.write(String.format("%s; MAG; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
-                    break;
-                case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                    writer.write(String.format("%s; MAG_UN; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
-                    break;
-                case Sensor.TYPE_ROTATION_VECTOR:
-                    writer.write(String.format("%s; ROT; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f));
-                    break;
-                case Sensor.TYPE_GAME_ROTATION_VECTOR:
-                    writer.write(String.format("%s; GAME_ROT; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f));
-                    break;
-                case  Sensor.TYPE_AMBIENT_TEMPERATURE:
-                    writer.write(String.format("%s; TEMP; %f; \n", timestamp, evt.values[0]));
-                    break;
-                case  Sensor.TYPE_LIGHT:
-                    writer.write(String.format("%s; LIGHT; %f; \n", timestamp, evt.values[0]));
-                    break;
-                case  Sensor.TYPE_PRESSURE:
-                    writer.write(String.format("%s; PRESSURE; %f;\n", timestamp, evt.values[0]));
-                    break;
-                case  Sensor.TYPE_PROXIMITY:
-                    writer.write(String.format("%s; PROXIMITY; %f;\n", timestamp, evt.values[0]));
-                    break;
+        if(writer!=null){
+            try {
+                switch(evt.sensor.getType()) {
+//                    case Sensor.TYPE_ACCELEROMETER:
+//                        writer.write(String.format("%s; ACC; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2]));
+//                        break;
+//                    case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+//                        writer.write(String.format("%s; GYRO_UN; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], evt.values[4], evt.values[5]));
+//                        break;
+//                    case Sensor.TYPE_GYROSCOPE:
+//                        writer.write(String.format("%s; GYRO; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
+//                        break;
+//                    case Sensor.TYPE_MAGNETIC_FIELD:
+//                        writer.write(String.format("%s; MAG; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
+//                        break;
+//                    case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+//                        writer.write(String.format("%s; MAG_UN; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], 0.f, 0.f, 0.f));
+//                        break;
+//                    case Sensor.TYPE_ROTATION_VECTOR:
+//                        writer.write(String.format("%s; ROT; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f));
+//                        break;
+//                    case Sensor.TYPE_GAME_ROTATION_VECTOR:
+//                        writer.write(String.format("%s; GAME_ROT; %f; %f; %f; %f; %f; %f\n", timestamp, evt.values[0], evt.values[1], evt.values[2], evt.values[3], 0.f, 0.f));
+//                        break;
+//                    case  Sensor.TYPE_AMBIENT_TEMPERATURE:
+//                        writer.write(String.format("%s; TEMP; %f; \n", timestamp, evt.values[0]));
+//                        break;
+                    case  Sensor.TYPE_LIGHT:
+                        writer.write(String.format("%s; LIGHT; %f; \n", timestamp, evt.values[0]));
+                        break;
+//                    case  Sensor.TYPE_PRESSURE:
+//                        writer.write(String.format("%s; PRESSURE; %f;\n", timestamp, evt.values[0]));
+//                        break;
+//                    case  Sensor.TYPE_PROXIMITY:
+//                        writer.write(String.format("%s; PROXIMITY; %f;\n", timestamp, evt.values[0]));
+//                        break;
+                }
+                writer.flush();
+                fout.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            writer.flush();
-            fout.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -156,6 +160,7 @@ public class SensorLogService extends Service implements SensorEventListener2, L
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -170,11 +175,15 @@ public class SensorLogService extends Service implements SensorEventListener2, L
     @Override
     public void onLocationChanged(Location location) {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        try{
-            writer.write(String.format("%s; LAT; %f; LONG; %f; SPEED; %f; ALT; %f\n", timestamp, location.getLatitude(), location.getLongitude(),
-                location.getSpeed(), location.getAltitude()));
-        }catch (IOException e){
-            e.printStackTrace();
+        if(writer!=null) {
+            try {
+                writer.write(String.format("%s; LAT; %f; LONG; %f; SPEED; %f; ALT; %f\n", timestamp, location.getLatitude(), location.getLongitude(),
+                        location.getSpeed(), location.getAltitude()));
+                writer.flush();
+                fout.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

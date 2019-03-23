@@ -43,8 +43,8 @@ public class LteLogService extends Service {
         this.tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        this.fileName = "lte_log_" + timestamp + ".txt";
-        this.fout = Utils.setupFile(this,"/Movies/", fileName);
+        this.fileName = "lte_log_" + timestamp + ".log";
+        this.fout = Utils.setupFile(this,"/distressnet/MStorm/WiFiLogger/", fileName);
         this.out = new OutputStreamWriter(fout);
     }
 

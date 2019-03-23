@@ -83,7 +83,6 @@ public class WiFiLogService extends Service {
         @Override
         public void run() {
             while (!this.isInterrupted()){
-                System.out.println("lalala");
                 performWiFiScan();
                 try{
                     sleep(interval);
@@ -103,9 +102,8 @@ public class WiFiLogService extends Service {
         this.interval=Integer.valueOf(extras.get("interval").toString());
         Toast.makeText(this, "wifi logging service starting with interval "+this.interval+"ms", Toast.LENGTH_SHORT).show();
 
-        //logTh = new WifiLogger();
-        //logTh.start();
-        performWiFiScan();
+        logTh = new WifiLogger();
+        logTh.start();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -116,8 +114,8 @@ public class WiFiLogService extends Service {
         this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        fileName = "wifilog_" + timestamp + ".txt";
-        fout = Utils.setupFile(this,"/Movies/", fileName);
+        fileName = "wifilog_" + timestamp + ".log";
+        fout = Utils.setupFile(this,"/distressnet/MStorm/WiFiLogger/", fileName);
         out = new OutputStreamWriter(fout);
     }
 

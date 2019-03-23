@@ -12,6 +12,8 @@ import android.net.wifi.WifiInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -26,6 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lenss.yzeng.wifilogger.util.Utils;
+
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
@@ -35,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener2 {
@@ -45,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView intervalEditView;
     private EditText editUrl, editPingNum;
     private static int count = 0;
-
+    private TextView mLog = null;
     private TextView mag_data;
     private TextView acc_data;
 
@@ -54,29 +59,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     SensorManager manager;
 
-    public String ping(String url, String count) {
-        String str = "";
-        try {
-            Process process = Runtime.getRuntime().exec(
-                    "/system/bin/ping -c "+count+" "+ url);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    process.getInputStream()));
-            int i;
-            char[] buffer = new char[4096];
-            StringBuffer output = new StringBuffer();
-            while ((i = reader.read(buffer)) > 0)
-                output.append(buffer, 0, i);
-            reader.close();
-
-            // body.append(output.toString()+"\n");
-            str = output.toString();
-            // Log.d(TAG, str);
-        } catch (IOException e) {
-            // body.append("Error\n");
-            e.printStackTrace();
-        }
-        return str;
-    }
+    private static final int PING_LOG_CLEAR = 0;
+    private static final int PING_LOG_APPEND = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,23 +68,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                                                    Manifest.permission.INTERNET},1 );
+
+        manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         hostText=findViewById(R.id.hostText);
         pingNumText=findViewById(R.id.pingNumText);
         editUrl=findViewById(R.id.editUrlText);
         editPingNum=findViewById(R.id.editNumText);
+        mLog = findViewById(R.id.log);
         setPingBtn=findViewById(R.id.setPingBtn);
         pingBtn=findViewById(R.id.pingBtn);
+
         setPingBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 String pingHost=editUrl.getText().toString(),
@@ -110,10 +93,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 pingNumText.setText(pingNum);
             }
         });
+
         pingBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Toast.makeText(MainActivity.this, "pinging!!!", Toast.LENGTH_SHORT);
-                ping(hostText.getText().toString(), pingNumText.getText().toString());
+                new Thread(new Ping(hostText.getText().toString(), pingNumText.getText().toString())).start();
             }
         });
 
@@ -290,4 +274,64 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+    class Ping implements Runnable {
+        String host;
+        String count;
+
+        public Ping(String host, String count){
+            this.host = host;
+            this.count = count;
+        }
+
+        public void run() {
+            String fileName = "ping_log_";
+            String filePath = "/distressnet/MStorm/WiFiLogger/";
+            FileOutputStream fout = null;
+            OutputStreamWriter writer = null;
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            fileName = fileName + timestamp + ".log";
+
+            try {
+                fout = Utils.setupFile(MainActivity.this, filePath, fileName);
+                writer = new OutputStreamWriter(fout);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mHandler.obtainMessage(PING_LOG_CLEAR,"").sendToTarget();
+            String inputLine;
+            try {
+                Process process = Runtime.getRuntime().exec("/system/bin/ping -c " + count + " " + host);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                while ((inputLine = reader.readLine()) != null) {
+                    writer.write("\n"+inputLine);
+                    mHandler.obtainMessage(PING_LOG_APPEND,inputLine).sendToTarget();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                writer.close();
+                fout.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private final Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            switch(msg.what){
+                case PING_LOG_CLEAR:
+                    mLog.setText("");
+                case PING_LOG_APPEND:
+                    mLog.append("\n"+msg.obj.toString());
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    };
 }

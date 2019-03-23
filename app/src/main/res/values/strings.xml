@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WifiLogger</string>
+    <string name="app_name">WifiLTEGPSLogger</string>
     <string name="action_settings">Settings</string>
     <string name="wifi_band_2ghz" translatable="false">2.4 GHz</string>
     <string name="wifi_band_5ghz" translatable="false">5 GHz</string>
