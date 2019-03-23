@@ -36,7 +36,7 @@ import java.util.Date;
 public class SensorLogService extends Service implements SensorEventListener2, LocationListener{
     SensorManager manager = null;
     String fileName = "sensor_log_";
-    String filePath = "/distressnet/MStorm/WiFiLogger/";
+    String filePath = "/distressnet/MStorm/WifiLTEGPSLogger/";
     FileOutputStream fout = null;
     OutputStreamWriter writer = null;
     LocationManager locationManager = null;

@@ -44,7 +44,7 @@ public class LteLogService extends Service {
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         this.fileName = "lte_log_" + timestamp + ".log";
-        this.fout = Utils.setupFile(this,"/distressnet/MStorm/WiFiLogger/", fileName);
+        this.fout = Utils.setupFile(this,"/distressnet/MStorm/WifiLTEGPSLogger/", fileName);
         this.out = new OutputStreamWriter(fout);
     }
 

@@ -115,7 +115,7 @@ public class WiFiLogService extends Service {
 
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         fileName = "wifilog_" + timestamp + ".log";
-        fout = Utils.setupFile(this,"/distressnet/MStorm/WiFiLogger/", fileName);
+        fout = Utils.setupFile(this,"/distressnet/MStorm/WifiLTEGPSLogger/", fileName);
         out = new OutputStreamWriter(fout);
     }
 

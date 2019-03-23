@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         public void run() {
             String fileName = "ping_log_";
-            String filePath = "/distressnet/MStorm/WiFiLogger/";
+            String filePath = "/distressnet/MStorm/WifiLTEGPSLogger/";
             FileOutputStream fout = null;
             OutputStreamWriter writer = null;
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
