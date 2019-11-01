@@ -33,7 +33,7 @@ import java.util.Locale;
 public class Utils {
     public static String convertTime(long time){
         Date date = new Date(time);
-        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        Format format = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
         return format.format(date);
     }
 
@@ -87,8 +87,8 @@ public class Utils {
         FileOutputStream fOut = null;
 
         try {
-            file.createNewFile();
-            fOut = new FileOutputStream(file);
+            //file.createNewFile();
+            fOut = new FileOutputStream(file,true);
 
             System.out.println("created file out put stream");
         }catch(Exception e){

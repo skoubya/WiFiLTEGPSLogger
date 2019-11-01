@@ -12,9 +12,11 @@
         android:id="@+id/btnLayout"
         android:layout_width="364dp"
         android:layout_height="175dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/intervalLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,9 +25,13 @@
             android:id="@+id/startWifiBtn"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
             android:text="Start WiFi Log"
+            app:layout_constraintBottom_toTopOf="@+id/startLteBtn"
+            app:layout_constraintEnd_toStartOf="@+id/stopWifiBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,78 +39,126 @@
             android:id="@+id/stopWifiBtn"
             android:layout_width="162dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="Stop WiFi Log"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/startWifiBtn"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/startSenseBtn"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Start Sensor Log"
-            app:layout_constraintBottom_toTopOf="@+id/startLteBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startWifiBtn" />
-
-
-        <Button
-            android:id="@+id/stopSenseBtn"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Stop Sensor Log"
             app:layout_constraintBottom_toTopOf="@+id/stopLteBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/startSenseBtn"
-            app:layout_constraintTop_toBottomOf="@+id/stopWifiBtn"
-            app:layout_constraintVertical_bias="0.315" />
+            app:layout_constraintStart_toEndOf="@+id/startWifiBtn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/startLteBtn"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="2dp"
             android:text="Start LTE Log"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/startGpsBtn"
+            app:layout_constraintEnd_toStartOf="@+id/stopLteBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startWifiBtn"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/stopLteBtn"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="72dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="Stop LTE Logging"
+            android:layout_marginTop="3dp"
+            android:text="Stop LTE Log"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/startLteBtn" />
+            app:layout_constraintStart_toEndOf="@+id/startLteBtn"
+            app:layout_constraintTop_toBottomOf="@+id/stopWifiBtn" />
+
+        <Button
+            android:id="@+id/startGpsBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:layout_marginStart="11dp"
+            android:text="Start GPS Log"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/stopGpsBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startLteBtn" />
+
+        <Button
+            android:id="@+id/stopGpsBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="1dp"
+            android:text="Stop GPS Log"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/startGpsBtn"
+            app:layout_constraintTop_toBottomOf="@+id/stopLteBtn"
+            app:layout_constraintVertical_bias="0.0" />
+
     </android.support.constraint.ConstraintLayout>
+
+    <!--<android.support.constraint.Guideline-->
+    <!--android:id="@+id/guideline"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical"-->
+    <!--app:layout_constraintGuide_begin="20dp" />-->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/intervalLayout"
         android:layout_width="360dp"
         android:layout_height="88dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLayout">
+
+        <Button
+            android:id="@+id/setFreqBtn"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="8dp"
+            android:text="Set logging interval (ms)"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/editFreqText"
+            android:layout_width="87dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:inputType="number"
+            android:text="2000"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/setFreqBtn"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/freqLabel"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/freqLabel"
@@ -125,132 +179,12 @@
             android:id="@+id/intervalTextView"
             android:layout_width="88dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="136dp"
+            android:layout_marginEnd="80dp"
             android:layout_marginTop="8dp"
-            android:text="5000"
+            android:text="2000"
             android:textAlignment="center"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editFreqText"
-            android:layout_width="87dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:inputType="number"
-            android:text="10"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/setFreqBtn"
-            app:layout_constraintHorizontal_bias="0.666"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/freqLabel"
-            app:layout_constraintVertical_bias="0.186" />
-
-        <Button
-            android:id="@+id/setFreqBtn"
-            android:layout_width="216dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Set logging interval (ms)"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-    </android.support.constraint.ConstraintLayout>
-
-    <!--<android.support.constraint.Guideline-->
-    <!--android:id="@+id/guideline"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical"-->
-    <!--app:layout_constraintGuide_begin="20dp" />-->
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/pingLayout"
-        android:layout_width="360dp"
-        android:layout_height="39dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/hostLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Ping Host: "
-            android:textAlignment="textStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/hostText"
-            android:layout_width="79dp"
-            android:layout_height="20dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="192.168.1.1"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/hostLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/pingNumLabel"
-            android:layout_width="72dp"
-            android:layout_height="18dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="# of pings: "
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/hostText"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/pingNumText"
-            android:layout_width="30dp"
-            android:layout_height="17dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="5"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pingNumLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/pingBtn"
-            android:layout_width="64dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Ping"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pingNumText"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
@@ -258,67 +192,61 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="360dp"
-        android:layout_height="46dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/intervalLayout">
 
         <EditText
             android:id="@+id/editUrlText"
-            android:layout_width="182dp"
+            android:layout_width="168dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="192.168.1.1"
-            android:textAlignment="center"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="331dp" />
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/editNumText"
-            android:layout_width="77dp"
+            android:layout_width="73dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="number"
-            android:text="5"
-            android:textAlignment="center"
-            tools:layout_editor_absoluteX="206dp"
-            tools:layout_editor_absoluteY="331dp" />
+            android:text="10"
+            android:textAlignment="center" />
 
         <Button
-            android:id="@+id/setPingBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:text="Set Ping"
-            tools:layout_editor_absoluteX="280dp"
-            tools:layout_editor_absoluteY="331dp" />
+            android:id="@+id/pingBtn"
+            android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:text="Ping" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="360dp"
-        android:layout_height="250dp"
+        android:layout_width="356dp"
+        android:layout_height="272dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pingLayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
 
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="270dp"
             android:layout_gravity="center_horizontal">
 
             <TextView

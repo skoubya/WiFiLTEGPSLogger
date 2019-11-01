@@ -1,10 +1,13 @@
 package com.lenss.yzeng.wifilogger;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,32 +31,19 @@ import static java.lang.Thread.sleep;
 
 public class LteLogService extends Service {
     TelephonyManager tm=null;
-    String fileName=null;
+    String fileName = "lte.log";
+    String filePath = "/distressnet/MStorm/WifiLTEGPSLogger/";
     FileOutputStream fout=null;
     OutputStreamWriter out=null;
-    int interval=5000;
+    int interval=2000;
     Thread logTh=null;
-
-    public LteLogService() {
-    }
-
-    @Override
-    public void onCreate(){
-        super.onCreate();
-        this.tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        this.fileName = "lte_log_" + timestamp + ".log";
-        this.fout = Utils.setupFile(this,"/distressnet/MStorm/WifiLTEGPSLogger/", fileName);
-        this.out = new OutputStreamWriter(fout);
-    }
 
     public class LteLogger extends Thread{
         @Override
         public void run() {
             while (!this.isInterrupted()){
                 int dbm=collectLteLog();
-                String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date());
                 try{
                     out.append(timestamp+"|"+dbm+"\n");
                     out.flush();
@@ -72,15 +62,42 @@ public class LteLogService extends Service {
     }
 
     @Override
+    public void onCreate(){
+        super.onCreate();
+        this.tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        this.fout = Utils.setupFile(this,filePath, fileName);
+        this.out = new OutputStreamWriter(fout);
+        try {
+            out.append("\n\n\n==============" + new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()) + "==================\n");
+            out.flush();
+            fout.flush();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Notification notification = new Notification();
         //startForeground(101, notification);
         Bundle extras=intent.getExtras();
-        this.interval=Integer.valueOf(extras.get("interval").toString());
-        Toast.makeText(this, "lte logging service starting with interval "+this.interval+"ms", Toast.LENGTH_SHORT).show();
-
+        interval=Integer.valueOf(extras.get("interval").toString());
         logTh = new LteLogger();
         logTh.start();
+
+        // Start this service as foreground service
+        Notification.Builder builder = new Notification.Builder (this.getApplicationContext());
+        Intent nfIntent = new Intent(this, MainActivity.class);
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0))
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_lte_logger))
+                .setContentTitle("LTE logger Is Running")
+                .setSmallIcon(R.drawable.ic_lte_logger)
+                .setContentText("LTE logger Is Running")
+                .setWhen(System.currentTimeMillis());
+        Notification notification = builder.build();
+        notification.defaults = Notification.DEFAULT_SOUND;
+        startForeground(104, notification);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -96,13 +113,18 @@ public class LteLogService extends Service {
                 }
             }
         }
-        List<CellInfo> cellInfoList=this.tm.getAllCellInfo();
-        for (CellInfo cellInfo : cellInfoList) {
-            if (cellInfo instanceof CellInfoLte) {
-                // cast to CellInfoLte and call all the CellInfoLte methods you need
-                dbm=((CellInfoLte) cellInfo).getCellSignalStrength().getDbm();
+        if(tm!=null){
+            List<CellInfo> cellInfoList= tm.getAllCellInfo();
+            if(cellInfoList!=null) {
+                for (CellInfo cellInfo : cellInfoList) {
+                    if (cellInfo instanceof CellInfoLte) {
+                        // cast to CellInfoLte and call all the CellInfoLte methods you need
+                        dbm = ((CellInfoLte) cellInfo).getCellSignalStrength().getDbm();
+                    }
+                }
             }
         }
+
         return dbm;
     }
 
@@ -116,11 +138,10 @@ public class LteLogService extends Service {
     public void onDestroy(){
         if(this.logTh!=null){
             this.logTh.interrupt();
-            Toast.makeText(this, "stopped lte logging thread!", Toast.LENGTH_SHORT).show();
         }
         try {
-            this.fout.close();
-            this.out.close();
+            fout.close();
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

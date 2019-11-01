@@ -2,12 +2,14 @@ package com.lenss.yzeng.wifilogger;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -55,29 +57,11 @@ public class WiFiLogService extends Service {
 
     private FileOutputStream fout = null;
     private OutputStreamWriter out = null;
-    private String fileName = null;
+    String fileName = "wifi.log";
+    String filePath = "/distressnet/MStorm/WifiLTEGPSLogger/";
     private BroadcastReceiver wifiScanReceiver = null;
-    private int interval=5000;
+    private int interval=2000;
     private Thread logTh;
-
-    public WiFiLogService(){
-        super();
-    }
-
-//    @Override
-//    protected void onHandleIntent(Intent intent) {
-//        // Normally we would do some work here, like download a file.
-//        // For our sample, we just sleep for 5 seconds.
-//        while (true){
-//            System.out.println("lalala");
-//            performWiFiScan();
-//            try{
-//                sleep(5000);
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     public class WifiLogger extends Thread{
         @Override
@@ -99,12 +83,22 @@ public class WiFiLogService extends Service {
         //Notification notification = new Notification();
         //startForeground(101, notification);
         Bundle extras=intent.getExtras();
-        this.interval=Integer.valueOf(extras.get("interval").toString());
-        Toast.makeText(this, "wifi logging service starting with interval "+this.interval+"ms", Toast.LENGTH_SHORT).show();
-
+        interval=Integer.valueOf(extras.get("interval").toString());
         logTh = new WifiLogger();
         logTh.start();
 
+        // Start this service as foreground service
+        Notification.Builder builder = new Notification.Builder (this.getApplicationContext());
+        Intent nfIntent = new Intent(this, MainActivity.class);
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0))
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_wifi_logger))
+                .setContentTitle("WiFi logger Is Running")
+                .setSmallIcon(R.drawable.ic_wifi_logger)
+                .setContentText("WiFi logger Is Running")
+                .setWhen(System.currentTimeMillis());
+        Notification notification = builder.build();
+        notification.defaults = Notification.DEFAULT_SOUND;
+        startForeground(103, notification);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -112,11 +106,16 @@ public class WiFiLogService extends Service {
     public void onCreate(){
         super.onCreate();
         this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        fileName = "wifilog_" + timestamp + ".log";
-        fout = Utils.setupFile(this,"/distressnet/MStorm/WifiLTEGPSLogger/", fileName);
+        fout = Utils.setupFile(this,filePath, fileName);
         out = new OutputStreamWriter(fout);
+
+        try {
+            out.append("\n\n\n==============" + new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date()) + "==================\n");
+            out.flush();
+            fout.flush();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     private List<WiFiDetail> resultToDetails(List<ScanResult> scanResults){
@@ -175,23 +174,21 @@ public class WiFiLogService extends Service {
             }
         }
         List<ScanResult> scanResults = wifiManager.getScanResults();
-        String timestamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date());
         List<WiFiDetail> wifiDetails = resultToDetails(scanResults);
         final StringBuilder result = new StringBuilder();
-        result.append(
-                String.format(Locale.ENGLISH,
-                        "Time Stamp|SSID|BSSID|Strength|Primary Channel|Primary Frequency|Center Channel|Center Frequency|Width (Range)|Distance|Security%n"));
+        result.append(String.format(Locale.ENGLISH,"Time Stamp|SSID|Strength|Primary Frequency|Distance%n"));
         IterableUtils.forEach(wifiDetails, new WiFiDetailClosure(timestamp, result));
-
+        result.append("===================================================\n");
+        result.append(String.format(Locale.ENGLISH,"Time Stamp|SSID|Strength%n"));
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        result.append(timestamp + "|" + wifiInfo.getSSID() + "|" + wifiInfo.getRssi() + "\n");
         String wifiHistData = (result.toString() + "\n");
-
-
         // to prevent string overflow, set a max string length of 4MB
         try{
             out.append(wifiHistData);
             out.flush();
             fout.flush();
-            wifiHistData = "";
         }catch (IOException e){
             e.printStackTrace();
         }

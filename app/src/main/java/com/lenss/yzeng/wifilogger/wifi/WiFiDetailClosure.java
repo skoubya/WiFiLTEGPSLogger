@@ -26,22 +26,12 @@ public class WiFiDetailClosure implements Closure<WiFiDetail> {
     @Override
     public void execute(WiFiDetail wiFiDetail) {
         WiFiSignal wiFiSignal = wiFiDetail.getWiFiSignal();
-        result.append(String.format(Locale.ENGLISH, "%s|%s|%s|%ddBm|%d|%d%s|%d|%d%s|%d%s (%d - %d)|%.1fm|%s%n",
+        result.append(String.format(Locale.ENGLISH, "%s|%s|%ddBm|%d%s|%.1fm%n",
                 timestamp,
                 wiFiDetail.getSSID(),
-                wiFiDetail.getBSSID(),
                 wiFiSignal.getLevel(),
-                wiFiSignal.getPrimaryWiFiChannel().getChannel(),
                 wiFiSignal.getPrimaryFrequency(),
                 WiFiSignal.FREQUENCY_UNITS,
-                wiFiSignal.getCenterWiFiChannel().getChannel(),
-                wiFiSignal.getCenterFrequency(),
-                WiFiSignal.FREQUENCY_UNITS,
-                wiFiSignal.getWiFiWidth().getFrequencyWidth(),
-                WiFiSignal.FREQUENCY_UNITS,
-                wiFiSignal.getFrequencyStart(),
-                wiFiSignal.getFrequencyEnd(),
-                wiFiSignal.getDistance(),
-                wiFiDetail.getCapabilities()));
+                wiFiSignal.getDistance()));
     }
 }
