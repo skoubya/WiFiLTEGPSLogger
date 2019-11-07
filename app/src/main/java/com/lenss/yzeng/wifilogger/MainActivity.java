@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -45,6 +46,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity{
 
     private Button startWifiBtn, stopWifiBtn, startLteBtn, stopLteBtn, startGpsBtn, stopGpsBtn;
+    private Button startLoggingBtn, stopLoggingBtn;
     private Button  pingBtn, setFreqBtn;
     private TextView intervalTextView;
     private TextView intervalEditView;
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity{
         startGpsBtn = (Button)findViewById(R.id.startGpsBtn);
         stopGpsBtn = (Button)findViewById(R.id.stopGpsBtn);
         stopGpsBtn.setEnabled(false);
+
+        startLoggingBtn = (Button)findViewById(R.id.startLoggingBtn);
+        stopLoggingBtn = (Button)findViewById(R.id.stopLoggingBtn);
+        stopLoggingBtn.setEnabled(false);
 
         startWifiBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -145,6 +151,31 @@ public class MainActivity extends AppCompatActivity{
                 stopService(new Intent(MainActivity.this, GPSLogService.class));
                 stopGpsBtn.setEnabled(false);
                 startGpsBtn.setEnabled(true);
+            }
+        });
+
+        startLoggingBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(MainActivity.this, "Starting logging", Toast.LENGTH_SHORT).show();
+                Intent serviceIntent=new Intent(MainActivity.this, LogService.class);
+                serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
+                LogService.LogDataList logDataList = new LogService.LogDataList();
+                logDataList.add(new LTEData("lte", null));
+                serviceIntent.putExtra("log_data", (Parcelable)logDataList);
+                startService(serviceIntent);
+                startLoggingBtn.setEnabled(false);
+                stopLoggingBtn.setEnabled(true);
+            }
+        });
+
+        stopLoggingBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(MainActivity.this, "Stopping logging", Toast.LENGTH_SHORT).show();
+                stopService(new Intent(MainActivity.this, LogService.class));
+                stopLoggingBtn.setEnabled(false);
+                startLoggingBtn.setEnabled(true);
             }
         });
 
