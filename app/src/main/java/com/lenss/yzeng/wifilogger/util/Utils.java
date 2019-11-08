@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -95,6 +96,28 @@ public class Utils {
             e.printStackTrace();
         }
         return fOut;
+    }
+
+    // Returns first output row of the command that has a match to the search string
+    public static String searchCommandOutput(String[] command, String search) throws IOException{
+        byte[] byteArry = new byte[1024];;
+
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+        InputStream inputStream = process.getInputStream();
+
+        while (inputStream.read(byteArry) != -1) {
+            String ouput = new String(byteArry);
+            String[] rows = ouput.split("\\n");
+            for (String row : rows){
+                if(row.contains(search)) {
+                    return row;
+                }
+            }
+        }
+        inputStream.close();
+
+        return "";
     }
 
 //    public void wifiScan(Context context){

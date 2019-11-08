@@ -11,10 +11,10 @@ import android.telephony.TelephonyManager;
 
 import java.util.List;
 
-public class LTEData extends LogService.LogData {
+public class LTERPData extends LogService.LogData {
     private TelephonyManager tm = null;
 
-    public LTEData(String name, Context context){
+    public LTERPData(String name, Context context){
         super(name, context);
         if (cntxt != null) {
             tm = (TelephonyManager)cntxt.getSystemService(Context.TELEPHONY_SERVICE);

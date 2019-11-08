@@ -1,26 +1,14 @@
 package com.lenss.yzeng.wifilogger;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener2;
-import android.hardware.SensorManager;
-import android.net.wifi.WifiInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,15 +19,11 @@ import android.widget.Toast;
 
 import com.lenss.yzeng.wifilogger.util.Utils;
 
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -161,7 +145,11 @@ public class MainActivity extends AppCompatActivity{
                 Intent serviceIntent=new Intent(MainActivity.this, LogService.class);
                 serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
                 LogService.LogDataList logDataList = new LogService.LogDataList();
-                logDataList.add(new LTEData("lte", null));
+                logDataList.add(new LTERPData("lte_rp", null));
+                logDataList.add(new BatteryData("bat", null));
+                logDataList.add(new ScreenData("scrn", null));
+                logDataList.add(new CPUData("cpu", null));
+                logDataList.add(new CtxtData("ctxt", null));
                 serviceIntent.putExtra("log_data", (Parcelable)logDataList);
                 startService(serviceIntent);
                 startLoggingBtn.setEnabled(false);
