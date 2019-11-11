@@ -1,7 +1,8 @@
-package com.lenss.yzeng.wifilogger;
+package com.lenss.yzeng.wifilogger.logdata;
 
 import android.content.Context;
 
+import com.lenss.yzeng.wifilogger.LogService;
 import com.lenss.yzeng.wifilogger.util.Utils;
 
 import java.io.IOException;
@@ -37,7 +38,6 @@ public class CtxtData extends LogService.LogData {
             if(prevCtxtSwitch != -1){
                 int usage = (ctxtSwitch- prevCtxtSwitch);
                 result = Integer.toString(usage);
-                System.out.println(result);
             }
             prevCtxtSwitch = ctxtSwitch;
         }

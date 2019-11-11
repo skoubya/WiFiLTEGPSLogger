@@ -1,9 +1,11 @@
-package com.lenss.yzeng.wifilogger;
+package com.lenss.yzeng.wifilogger.logdata;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+
+import com.lenss.yzeng.wifilogger.LogService;
 
 public class BatteryData extends LogService.LogData {
 

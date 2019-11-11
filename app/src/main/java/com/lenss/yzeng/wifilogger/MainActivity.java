@@ -1,6 +1,7 @@
 package com.lenss.yzeng.wifilogger;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,10 +14,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lenss.yzeng.wifilogger.logdata.BatteryData;
+import com.lenss.yzeng.wifilogger.logdata.CPUData;
+import com.lenss.yzeng.wifilogger.logdata.CtxtData;
+import com.lenss.yzeng.wifilogger.logdata.LTERPData;
+import com.lenss.yzeng.wifilogger.logdata.ScreenData;
 import com.lenss.yzeng.wifilogger.util.Utils;
 
 import java.io.BufferedReader;
@@ -24,17 +31,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Constructor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity{
 
-    private Button startWifiBtn, stopWifiBtn, startLteBtn, stopLteBtn, startGpsBtn, stopGpsBtn;
     private Button startLoggingBtn, stopLoggingBtn;
-    private Button  pingBtn, setFreqBtn;
+    private Button  setFreqBtn;
     private TextView intervalTextView;
     private TextView intervalEditView;
-    private EditText editUrl, editPingNum;
     private TextView mLog = null;
 
     private static final int PING_LOG_CLEAR = 0;
@@ -42,6 +48,43 @@ public class MainActivity extends AppCompatActivity{
 
     private String pingLogName = "ping.log";
     private String loggerFolder = "/distressnet/MStorm/WifiLTEGPSLogger/";
+
+    private CheckboxData[] checkboxes = {
+            new CheckboxData(R.id.batBox, "bat", BatteryData.class),
+            new CheckboxData(R.id.lteRpBox, "lte_rp", LTERPData.class),
+            new CheckboxData(R.id.cpuBox, "cpu", CPUData.class),
+            new CheckboxData(R.id.ctxtBox, "ctxt", CtxtData.class),
+            new CheckboxData(R.id.scrnBox, "scrn", ScreenData.class)};
+
+    private class CheckboxData{
+        private int checkboxId;
+        private String logDataName;
+        private Class logDataClass;
+
+        CheckboxData(int checkboxId, String logDataName, Class logDataClass){
+            this.checkboxId = checkboxId;
+            this.logDataName = logDataName;
+            if(LogService.LogData.class.isAssignableFrom(logDataClass)) {
+                this.logDataClass = logDataClass;
+            }
+            else{
+                this.logDataClass = null;
+                System.err.println("Class is not a subclass of LogData");
+            }
+        }
+
+        int getCheckboxId(){
+            return checkboxId;
+        }
+
+        String getLogDataName(){
+            return logDataName;
+        }
+
+        Class getLogDataClass(){
+            return logDataClass;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,88 +98,16 @@ public class MainActivity extends AppCompatActivity{
                                                                     Manifest.permission.ACCESS_FINE_LOCATION,
                                                                     Manifest.permission.INTERNET},1 );
 
-        startWifiBtn = (Button)findViewById(R.id.startWifiBtn);
-        stopWifiBtn = (Button)findViewById(R.id.stopWifiBtn);
-        stopWifiBtn.setEnabled(false);
-
-        startLteBtn = (Button)findViewById(R.id.startLteBtn);
-        stopLteBtn = (Button)findViewById(R.id.stopLteBtn);
-        stopLteBtn.setEnabled(false);
-
-        startGpsBtn = (Button)findViewById(R.id.startGpsBtn);
-        stopGpsBtn = (Button)findViewById(R.id.stopGpsBtn);
-        stopGpsBtn.setEnabled(false);
+        // Default select all checkboxes
+        //TODO: Have select all/ deselect all options
+        for(CheckboxData chckData : checkboxes) {
+            CheckBox box = findViewById(chckData.getCheckboxId());
+            box.setChecked(true);
+        }
 
         startLoggingBtn = (Button)findViewById(R.id.startLoggingBtn);
         stopLoggingBtn = (Button)findViewById(R.id.stopLoggingBtn);
         stopLoggingBtn.setEnabled(false);
-
-        startWifiBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-
-                Toast.makeText(MainActivity.this, "starting wifi logging!", Toast.LENGTH_SHORT).show();
-                Intent serviceIntent=new Intent(MainActivity.this, WiFiLogService.class);
-                serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
-                startService(serviceIntent);
-                startWifiBtn.setEnabled(false);
-                stopWifiBtn.setEnabled(true);
-            }
-        });
-
-        stopWifiBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "stopping wifi logging", Toast.LENGTH_SHORT).show();
-                stopService(new Intent(MainActivity.this, WiFiLogService.class));
-                stopWifiBtn.setEnabled(false);
-                startWifiBtn.setEnabled(true);
-            }
-        });
-
-        startLteBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(MainActivity.this, "starting lte logging", Toast.LENGTH_SHORT).show();
-                Intent serviceIntent=new Intent(MainActivity.this, LteLogService.class);
-                serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
-                startService(serviceIntent);
-                startLteBtn.setEnabled(false);
-                stopLteBtn.setEnabled(true);
-            }
-        });
-
-        stopLteBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(MainActivity.this, "stopping lte logging", Toast.LENGTH_SHORT).show();
-                stopService(new Intent(MainActivity.this, LteLogService.class));
-                stopLteBtn.setEnabled(false);
-                startLteBtn.setEnabled(true);
-            }
-        });
-
-        startGpsBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(MainActivity.this, "starting gps logging", Toast.LENGTH_SHORT).show();
-                Intent serviceIntent=new Intent(MainActivity.this, GPSLogService.class);
-                serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
-                startService(serviceIntent);
-                startGpsBtn.setEnabled(false);
-                stopGpsBtn.setEnabled(true);
-            }
-        });
-
-        stopGpsBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(MainActivity.this, "stopping gps logging", Toast.LENGTH_SHORT).show();
-                stopService(new Intent(MainActivity.this, GPSLogService.class));
-                stopGpsBtn.setEnabled(false);
-                startGpsBtn.setEnabled(true);
-            }
-        });
 
         startLoggingBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -145,11 +116,23 @@ public class MainActivity extends AppCompatActivity{
                 Intent serviceIntent=new Intent(MainActivity.this, LogService.class);
                 serviceIntent.putExtra("interval", Integer.valueOf(intervalTextView.getText().toString()));
                 LogService.LogDataList logDataList = new LogService.LogDataList();
-                logDataList.add(new LTERPData("lte_rp", null));
-                logDataList.add(new BatteryData("bat", null));
-                logDataList.add(new ScreenData("scrn", null));
-                logDataList.add(new CPUData("cpu", null));
-                logDataList.add(new CtxtData("ctxt", null));
+
+                //Check the checkboxes
+                for(CheckboxData chckData : checkboxes){
+                    CheckBox box = findViewById(chckData.getCheckboxId());
+                    if(box.isChecked()){
+                        try {
+                            Class clazz = chckData.getLogDataClass();
+                            Constructor constructor = clazz.getConstructor(String.class, Context.class);
+                            Object obj = constructor.newInstance(chckData.getLogDataName(), null);
+                            logDataList.add((LogService.LogData)obj);
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                
                 serviceIntent.putExtra("log_data", (Parcelable)logDataList);
                 startService(serviceIntent);
                 startLoggingBtn.setEnabled(false);
@@ -178,17 +161,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        editUrl=findViewById(R.id.editUrlText);
-        editPingNum=findViewById(R.id.editNumText);
-        pingBtn=findViewById(R.id.pingBtn);
-        pingBtn.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                String pingHost=editUrl.getText().toString();
-                String pingNum=editPingNum.getText().toString();
-                Toast.makeText(MainActivity.this, "pinging!!!", Toast.LENGTH_SHORT);
-                new Thread(new Ping(pingHost, pingNum)).start();
-            }
-        });
         mLog = findViewById(R.id.log);
     }
 

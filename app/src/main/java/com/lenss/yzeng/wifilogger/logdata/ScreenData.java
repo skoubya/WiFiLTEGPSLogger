@@ -1,8 +1,10 @@
-package com.lenss.yzeng.wifilogger;
+package com.lenss.yzeng.wifilogger.logdata;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.provider.Settings;
+
+import com.lenss.yzeng.wifilogger.LogService;
 
 public class ScreenData extends LogService.LogData {
     public ScreenData(String name, Context context){

@@ -28,10 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".WiFiLogService" android:stopWithTask="true"/>
-        <service android:name=".GPSLogService" android:stopWithTask="true"/>
-        <service android:name=".LteLogService" android:stopWithTask="true">
-        </service>
         <service android:name=".LogService" android:stopWithTask="true"/>
     </application>
 

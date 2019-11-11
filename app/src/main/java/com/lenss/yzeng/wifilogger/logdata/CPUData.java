@@ -1,7 +1,8 @@
-package com.lenss.yzeng.wifilogger;
+package com.lenss.yzeng.wifilogger.logdata;
 
 import android.content.Context;
 
+import com.lenss.yzeng.wifilogger.LogService;
 import com.lenss.yzeng.wifilogger.util.Utils;
 
 import java.io.IOException;

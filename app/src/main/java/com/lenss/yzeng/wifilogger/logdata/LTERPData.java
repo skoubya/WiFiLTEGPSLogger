@@ -1,4 +1,4 @@
-package com.lenss.yzeng.wifilogger;
+package com.lenss.yzeng.wifilogger.logdata;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
 import android.telephony.TelephonyManager;
+
+import com.lenss.yzeng.wifilogger.LogService;
 
 import java.util.List;
 
