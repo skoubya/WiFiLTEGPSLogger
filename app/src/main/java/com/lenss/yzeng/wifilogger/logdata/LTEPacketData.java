@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.os.Build;
 
 /* Abstract class for accessing transmitted and received data statistics for LTE */
 public abstract class LTEPacketData extends SingleDiffFileData {
@@ -17,6 +18,13 @@ public abstract class LTEPacketData extends SingleDiffFileData {
         command = COMMAND;
         prevSearch = "";
         search = "";
+
+        if(Build.VERSION.SDK_INT >= 28){//Android 9 and later
+            needRoot = true;
+        }
+        else {
+            needRoot = false;
+        }
     }
 
     @Override

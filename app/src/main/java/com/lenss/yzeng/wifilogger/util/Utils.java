@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -99,11 +100,30 @@ public class Utils {
     }
 
     // Returns first output row of the command that has a match to the search string
-    public static String searchCommandOutput(String[] command, String search) throws IOException{
+    public static String searchCommandOutput(String[] command, String search, boolean needRoot) throws IOException{
         byte[] byteArry = new byte[1024];
 
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        Process process = processBuilder.start();
+        Process process;
+
+        if(needRoot){
+            String[] rootCommand = {"su"};
+            ProcessBuilder rootProc = new ProcessBuilder(rootCommand);
+            process = rootProc.start();
+            OutputStream outputStream = process.getOutputStream();
+            String outputStr = "";
+            for(String str : command){
+                outputStr = outputStr.concat(str+" ");
+            }
+            outputStr = outputStr.concat("\n");
+            outputStream.write(outputStr.getBytes());
+            outputStream.flush();
+            outputStream.write("exit\n".getBytes());
+            outputStream.flush();
+        }else{
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            process = processBuilder.start();
+        }
+        
         InputStream inputStream = process.getInputStream();
 
         while (inputStream.read(byteArry) != -1) {

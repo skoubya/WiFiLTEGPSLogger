@@ -59,7 +59,7 @@ public class LTERPData extends LogService.LogData {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= 29){
+        if (Build.VERSION.SDK_INT >= 28){
             int invalid = 0x7FFFFFFF; //means invalid readings
             if (dbm.equals(Integer.toString(invalid))){
                 dbm = "NA";

@@ -1,6 +1,7 @@
 package com.lenss.yzeng.wifilogger.logdata;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.lenss.yzeng.wifilogger.LogService;
 import com.lenss.yzeng.wifilogger.util.Utils;
@@ -23,8 +24,13 @@ public class CPUData extends LogService.LogData {
     public String retrieve(){
         String result = "NA";
 
+        boolean needRoot = false;
+        if(Build.VERSION.SDK_INT >= 26) { //TODO: not sure which SDK
+            needRoot = true;
+        }
+
         try {
-            String row = Utils.searchCommandOutput(COMMAND, "cpu ");
+            String row = Utils.searchCommandOutput(COMMAND, "cpu ", needRoot);
             String[] vals = row.split("\\s");
 
             boolean cantAccess = row.isEmpty();

@@ -1,6 +1,7 @@
 package com.lenss.yzeng.wifilogger.logdata;
 
 import android.content.Context;
+import android.os.Build;
 
 /* Retrieves the number of context switches */
 public class CtxtData extends SingleDiffFileData {
@@ -13,5 +14,12 @@ public class CtxtData extends SingleDiffFileData {
         command = COMMAND;
         search = SEARCH;
         valPos = VAL_POS;
+
+        if(Build.VERSION.SDK_INT >= 26){//TODO: not sure which SDK
+            needRoot = true;
+        }
+        else {
+            needRoot = false;
+        }
     }
 }
