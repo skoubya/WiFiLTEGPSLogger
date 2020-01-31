@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,18 +20,22 @@ import android.widget.Toast;
 import com.lenss.yzeng.wifilogger.logdata.BatteryData;
 import com.lenss.yzeng.wifilogger.logdata.CPUData;
 import com.lenss.yzeng.wifilogger.logdata.CtxtData;
+import com.lenss.yzeng.wifilogger.logdata.LTERBData;
+import com.lenss.yzeng.wifilogger.logdata.LTERData;
 import com.lenss.yzeng.wifilogger.logdata.LTERPData;
+import com.lenss.yzeng.wifilogger.logdata.LTETBData;
+import com.lenss.yzeng.wifilogger.logdata.LTETData;
+import com.lenss.yzeng.wifilogger.logdata.MemData;
 import com.lenss.yzeng.wifilogger.logdata.ScreenData;
-import com.lenss.yzeng.wifilogger.util.Utils;
+import com.lenss.yzeng.wifilogger.logdata.ScreenOnData;
+import com.lenss.yzeng.wifilogger.logdata.WifiFData;
+import com.lenss.yzeng.wifilogger.logdata.WifiRBData;
+import com.lenss.yzeng.wifilogger.logdata.WifiRData;
+import com.lenss.yzeng.wifilogger.logdata.WifiRPData;
+import com.lenss.yzeng.wifilogger.logdata.WifiTBData;
+import com.lenss.yzeng.wifilogger.logdata.WifiTData;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +51,19 @@ public class MainActivity extends AppCompatActivity {
             new CheckboxData(R.id.lteRpBox, "lte_rp", LTERPData.class),
             new CheckboxData(R.id.cpuBox, "cpu", CPUData.class),
             new CheckboxData(R.id.ctxtBox, "ctxt", CtxtData.class),
-            new CheckboxData(R.id.scrnBox, "scrn", ScreenData.class)};
+            new CheckboxData(R.id.scrnBox, "scrn", ScreenData.class),
+            new CheckboxData(R.id.wifiRBox, "wifi_r", WifiRData.class),
+            new CheckboxData(R.id.wifiTBox, "wifi_t", WifiTData.class),
+            new CheckboxData(R.id.memBox, "mem", MemData.class),
+            new CheckboxData(R.id.wifiRPBox, "wifi_rp", WifiRPData.class),
+            new CheckboxData(R.id.wifiFBox, "wifi_f", WifiFData.class),
+            new CheckboxData(R.id.lteRBox, "lte_r", LTERData.class),
+            new CheckboxData(R.id.lteTBox, "lte_t", LTETData.class),
+            new CheckboxData(R.id.wifiRBBox, "wifi_rb", WifiRBData.class),
+            new CheckboxData(R.id.wifiTBBox, "wifi_tb", WifiTBData.class),
+            new CheckboxData(R.id.lteRBBox, "lte_rb", LTERBData.class),
+            new CheckboxData(R.id.lteTBBox, "lte_tb", LTETBData.class),
+            new CheckboxData(R.id.scrnOnBox, "scrn_on", ScreenOnData.class)};
 
     private class CheckboxData {
         private int checkboxId;

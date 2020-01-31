@@ -6,6 +6,7 @@ import android.provider.Settings;
 
 import com.lenss.yzeng.wifilogger.LogService;
 
+/* Retrieves the screen brightness */
 public class ScreenData extends LogService.LogData {
     public ScreenData(String name, Context context){
         super(name, context);

@@ -6,12 +6,12 @@ import com.lenss.yzeng.wifilogger.LogService;
 import com.lenss.yzeng.wifilogger.util.Utils;
 
 import java.io.IOException;
-import java.io.InputStream;
 
+/* Retrieves the percent usage of CPU */
 public class CPUData extends LogService.LogData {
     private static String[] COMMAND = {"/system/bin/cat", "/proc/stat"};
-    private int prevTotalCycles;
-    private int prevIdleCycles;
+    private long prevTotalCycles;
+    private long prevIdleCycles;
 
     public CPUData(String name, Context context){
         super(name,context);
@@ -27,8 +27,9 @@ public class CPUData extends LogService.LogData {
             String row = Utils.searchCommandOutput(COMMAND, "cpu ");
             String[] vals = row.split("\\s");
 
-            int totalCycles = 0;
-            int idleCycles = 0;
+            boolean cantAccess = row.isEmpty();
+            long totalCycles = 0;
+            long idleCycles = 0;
             int numCount = 0;
             int idleIndex = 4; //4th number is the idle cycles
             for(String val : vals){
@@ -44,12 +45,14 @@ public class CPUData extends LogService.LogData {
                 }
             }
 
-            if(prevTotalCycles != -1 && prevIdleCycles != -1){
-                double usage = 1 - (idleCycles-prevIdleCycles)/(double)(totalCycles - prevTotalCycles);
-                result = Double.toString(usage);
+            if(!cantAccess) {
+                if (prevTotalCycles != -1 && prevIdleCycles != -1) {
+                    double usage = 1 - (idleCycles - prevIdleCycles) / (double) (totalCycles - prevTotalCycles);
+                    result = Double.toString(usage);
+                }
+                prevTotalCycles = totalCycles;
+                prevIdleCycles = idleCycles;
             }
-            prevTotalCycles = totalCycles;
-            prevIdleCycles = idleCycles;
         }
         catch(IOException e){
             e.printStackTrace();

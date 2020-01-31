@@ -100,7 +100,7 @@ public class Utils {
 
     // Returns first output row of the command that has a match to the search string
     public static String searchCommandOutput(String[] command, String search) throws IOException{
-        byte[] byteArry = new byte[1024];;
+        byte[] byteArry = new byte[1024];
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
@@ -116,6 +116,7 @@ public class Utils {
             }
         }
         inputStream.close();
+        process.destroy();
 
         return "";
     }

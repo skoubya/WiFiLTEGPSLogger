@@ -7,6 +7,7 @@ import android.os.BatteryManager;
 
 import com.lenss.yzeng.wifilogger.LogService;
 
+/* Retrieves the battery percentage */
 public class BatteryData extends LogService.LogData {
 
     public BatteryData(String name, Context context){

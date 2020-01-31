@@ -81,7 +81,129 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ctxtBox"
+                    app:layout_constraintBottom_toBottomOf="@id/wifiRBox"/>
+
+                <CheckBox
+                    android:id="@+id/wifiRBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Received Packets"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scrnBox"
+                    app:layout_constraintBottom_toBottomOf="@id/wifiTBox"/>
+
+                <CheckBox
+                    android:id="@+id/wifiTBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Transmitted Packets"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiRBox"
+                    app:layout_constraintBottom_toBottomOf="@id/memBox"/>
+
+                <CheckBox
+                    android:id="@+id/memBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Memory Usage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiTBox"
+                    app:layout_constraintBottom_toBottomOf="@id/wifiRPBox"/>
+
+                <CheckBox
+                    android:id="@+id/wifiRPBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Received Power"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/memBox"
+                    app:layout_constraintBottom_toBottomOf="@id/wifiFBox"/>
+
+                <CheckBox
+                    android:id="@+id/wifiFBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Frequency"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiRPBox"
+                    app:layout_constraintBottom_toBottomOf="@id/lteRBox"/>
+
+                <CheckBox
+                    android:id="@+id/lteRBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LTE Received Packets"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiFBox"
+                    app:layout_constraintBottom_toBottomOf="@id/lteTBox"/>
+
+                <CheckBox
+                    android:id="@+id/lteTBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LTE Transmitted Packets"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lteRBox"
+                    app:layout_constraintBottom_toBottomOf="@id/wifiRBBox"/>
+
+                <CheckBox
+                    android:id="@+id/wifiRBBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Received Bytes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lteTBox"
+                    app:layout_constraintBottom_toBottomOf="@id/wifiTBBox"/>
+
+                <CheckBox
+                    android:id="@+id/wifiTBBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi Transmitted Bytes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiRBBox"
+                    app:layout_constraintBottom_toBottomOf="@id/lteRBBox"/>
+
+                <CheckBox
+                    android:id="@+id/lteRBBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LTE Received Bytes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiTBBox"
+                    app:layout_constraintBottom_toBottomOf="@id/lteTBBox"/>
+
+                <CheckBox
+                    android:id="@+id/lteTBBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LTE Transmitted Bytes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lteRBBox"
+                    app:layout_constraintBottom_toBottomOf="@id/scrnOnBox"/>
+
+                <CheckBox
+                    android:id="@+id/scrnOnBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Screen On"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lteTBBox"
                     app:layout_constraintBottom_toBottomOf="parent"/>
+
+
             </LinearLayout>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>
