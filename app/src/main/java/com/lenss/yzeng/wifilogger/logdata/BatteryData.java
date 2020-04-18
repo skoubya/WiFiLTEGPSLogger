@@ -10,8 +10,8 @@ import com.lenss.yzeng.wifilogger.LogService;
 /* Retrieves the battery percentage */
 public class BatteryData extends LogService.LogData {
 
-    public BatteryData(String name, Context context){
-        super(name, context);
+    public BatteryData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
     }
 
     @Override

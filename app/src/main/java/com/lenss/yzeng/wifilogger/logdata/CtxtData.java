@@ -9,8 +9,8 @@ public class CtxtData extends SingleDiffFileData {
     private static String SEARCH = "ctxt ";
     private static int VAL_POS = 0;
 
-    public CtxtData(String name, Context context){
-        super(name, context);
+    public CtxtData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
         command = COMMAND;
         search = SEARCH;
         valPos = VAL_POS;

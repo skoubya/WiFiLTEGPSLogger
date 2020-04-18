@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoLte;
-import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
 import com.lenss.yzeng.wifilogger.LogService;
@@ -18,8 +17,8 @@ import java.util.List;
 public class LTERPData extends LogService.LogData {
     private TelephonyManager tm = null;
 
-    public LTERPData(String name, Context context){
-        super(name, context);
+    public LTERPData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
         if (cntxt != null) {
             tm = (TelephonyManager)cntxt.getSystemService(Context.TELEPHONY_SERVICE);
         }

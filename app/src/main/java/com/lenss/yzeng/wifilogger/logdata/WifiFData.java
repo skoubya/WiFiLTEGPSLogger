@@ -8,8 +8,8 @@ import com.lenss.yzeng.wifilogger.LogService;
 
 /* Retrieves the Wifi frequency (in MHz)*/
 public class WifiFData extends LogService.LogData {
-    public WifiFData(String name, Context context){
-        super(name, context);
+    public WifiFData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
     }
 
     @Override

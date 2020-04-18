@@ -15,8 +15,8 @@ public abstract class SingleDiffFileData extends LogService.LogData {
     protected long prevVal;
     protected boolean needRoot;
 
-    public SingleDiffFileData(String name, Context context){
-        super(name, context);
+    public SingleDiffFileData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
         prevVal = -1;
         needRoot = false;
     }
@@ -26,7 +26,7 @@ public abstract class SingleDiffFileData extends LogService.LogData {
         String result = "NA";
 
         try {
-            String row = Utils.searchCommandOutput(command, search, needRoot);
+            String row = Utils.searchCommandOutput(command, search, needRoot, rootProc);
             String[] vals = row.split("\\s");
 
             Long currVal = null;

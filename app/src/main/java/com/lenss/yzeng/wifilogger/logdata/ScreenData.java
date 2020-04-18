@@ -8,8 +8,8 @@ import com.lenss.yzeng.wifilogger.LogService;
 
 /* Retrieves the screen brightness */
 public class ScreenData extends LogService.LogData {
-    public ScreenData(String name, Context context){
-        super(name, context);
+    public ScreenData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
     }
 
     @Override

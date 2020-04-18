@@ -9,8 +9,8 @@ public class WifiRBData extends SingleDiffFileData {
     private static String SEARCH = "wlan0:";
     private static int VAL_POS = 0;
 
-    public WifiRBData(String name, Context context){
-        super(name, context);
+    public WifiRBData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
         command = COMMAND;
         search = SEARCH;
         valPos = VAL_POS;

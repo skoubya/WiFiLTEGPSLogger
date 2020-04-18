@@ -7,8 +7,8 @@ import com.lenss.yzeng.wifilogger.LogService;
 
 /* Retrieves if the screen is on */
 public class ScreenOnData extends LogService.LogData {
-    public ScreenOnData(String name, Context context){
-        super(name, context);
+    public ScreenOnData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
     }
 
     @Override

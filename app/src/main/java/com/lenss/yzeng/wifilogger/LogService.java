@@ -27,18 +27,25 @@ public class LogService extends Service {
     int interval=2000;
     Thread logTh = null;
     LogDataList logData = null; // map from value name to its retriever
+    Process rootProc = null;
 
     public static abstract class LogData{
         public String name;
         protected Context cntxt;
+        protected Process rootProc;
 
-        public LogData(String name, Context context){
+        public LogData(String name, Context context, Process rootProc){
             this.name = name;
             this.cntxt = context;
+            this.rootProc = rootProc;
         }
 
         public void setCntxt(Context context){
             this.cntxt = context;
+        }
+
+        public void setRootProc(Process rootProc){
+            this.rootProc = rootProc;
         }
 
         public abstract String retrieve(); //Gets the current value for the data (NA if not available)
@@ -58,6 +65,7 @@ public class LogService extends Service {
             }
         };
         private Context cntxt = null; //TODO: is not passed with parcel
+        private Process rootProc = null;
 
         public LogDataList(){
             super();
@@ -72,8 +80,8 @@ public class LogService extends Service {
                 try {
                     String class_name = in.readString();
                     Class<?> clazz = Class.forName(class_name);
-                    Constructor<?> ctor = clazz.getConstructor(String.class,Context.class);
-                    obj = (LogData)ctor.newInstance(new Object[]{in.readString(),cntxt});
+                    Constructor<?> ctor = clazz.getConstructor(String.class,Context.class,Process.class);
+                    obj = (LogData)ctor.newInstance(new Object[]{in.readString(),cntxt,rootProc});
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -89,6 +97,14 @@ public class LogService extends Service {
 
             for(int i = 0; i < size(); i++){
                 get(i).setCntxt(this.cntxt);
+            }
+        }
+
+        public void setRootProc(Process rootProc){
+            this.rootProc = rootProc;
+
+            for(int i = 0; i < size(); i++){
+                get(i).setRootProc(rootProc);
             }
         }
 
@@ -158,6 +174,12 @@ public class LogService extends Service {
         System.out.println("Log service created");
         this.fout = Utils.setupFile(this,filePath, fileName);
         this.out = new OutputStreamWriter(fout);
+        try {
+            this.rootProc = Utils.startRootProcess();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.rootProc = null; //TODO: is this correct
+        }
     }
 
     @Override
@@ -168,6 +190,7 @@ public class LogService extends Service {
         interval=Integer.valueOf(extras.get("interval").toString());
         logData = extras.getParcelable("log_data");
         logData.setContext(this.getBaseContext().getApplicationContext());
+        logData.setRootProc(this.rootProc);
 
         logTh = new LogService.EnergyLogger();
         logTh.start();
@@ -202,8 +225,10 @@ public class LogService extends Service {
         try {
             fout.close();
             out.close();
+            Utils.endRootProcess(this.rootProc);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.rootProc = null;
     }
 }

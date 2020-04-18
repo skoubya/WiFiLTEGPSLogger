@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
                     if (box.isChecked()) {
                         try {
                             Class clazz = chckData.getLogDataClass();
-                            Constructor constructor = clazz.getConstructor(String.class, Context.class);
-                            Object obj = constructor.newInstance(chckData.getLogDataName(), null);
+                            Constructor constructor = clazz.getConstructor(String.class, Context.class, Process.class);
+                            Object obj = constructor.newInstance(chckData.getLogDataName(), null, null);
                             logDataList.add((LogService.LogData) obj);
                         } catch (Exception e) {
                             e.printStackTrace();

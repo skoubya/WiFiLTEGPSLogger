@@ -100,15 +100,16 @@ public class Utils {
     }
 
     // Returns first output row of the command that has a match to the search string
-    public static String searchCommandOutput(String[] command, String search, boolean needRoot) throws IOException{
+    public static String searchCommandOutput(String[] command, String search, boolean needRoot, Process rootProc) throws IOException{
         byte[] byteArry = new byte[1024];
 
         Process process;
 
         if(needRoot){
-            String[] rootCommand = {"su"};
-            ProcessBuilder rootProc = new ProcessBuilder(rootCommand);
-            process = rootProc.start();
+             if (rootProc == null){
+                return ""; //Does not have a root process to use
+            }
+            process = rootProc;
             OutputStream outputStream = process.getOutputStream();
             String outputStr = "";
             for(String str : command){
@@ -116,8 +117,6 @@ public class Utils {
             }
             outputStr = outputStr.concat("\n");
             outputStream.write(outputStr.getBytes());
-            outputStream.flush();
-            outputStream.write("exit\n".getBytes());
             outputStream.flush();
         }else{
             ProcessBuilder processBuilder = new ProcessBuilder(command);
@@ -136,9 +135,23 @@ public class Utils {
             }
         }
         inputStream.close();
-        process.destroy();
+        if(!needRoot) { //leave root process open
+            process.destroy();
+        }
 
         return "";
+    }
+
+    public static Process startRootProcess() throws IOException {
+        String[] rootCommand = {"su"};
+        ProcessBuilder rootProc = new ProcessBuilder(rootCommand);
+        return rootProc.start();
+    }
+
+    public static void endRootProcess(Process process) throws IOException {
+        OutputStream outputStream = process.getOutputStream();
+        outputStream.write("exit\n".getBytes());
+        outputStream.flush();
     }
 
 //    public void wifiScan(Context context){

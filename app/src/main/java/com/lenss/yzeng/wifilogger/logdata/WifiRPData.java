@@ -8,8 +8,8 @@ import com.lenss.yzeng.wifilogger.LogService;
 
 /* Retrieves the Wifi received power */
 public class WifiRPData extends LogService.LogData {
-    public WifiRPData(String name, Context context){
-        super(name, context);
+    public WifiRPData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
     }
 
     @Override

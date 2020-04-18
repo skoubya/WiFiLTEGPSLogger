@@ -14,8 +14,8 @@ public class CPUData extends LogService.LogData {
     private long prevTotalCycles;
     private long prevIdleCycles;
 
-    public CPUData(String name, Context context){
-        super(name,context);
+    public CPUData(String name, Context context, Process rootProc){
+        super(name,context, rootProc);
         prevTotalCycles = -1;
         prevIdleCycles = -1;
     }
@@ -30,7 +30,7 @@ public class CPUData extends LogService.LogData {
         }
 
         try {
-            String row = Utils.searchCommandOutput(COMMAND, "cpu ", needRoot);
+            String row = Utils.searchCommandOutput(COMMAND, "cpu ", needRoot, rootProc);
             String[] vals = row.split("\\s");
 
             boolean cantAccess = row.isEmpty();
@@ -38,6 +38,7 @@ public class CPUData extends LogService.LogData {
             long idleCycles = 0;
             int numCount = 0;
             int idleIndex = 4; //4th number is the idle cycles
+            // Last 3 values relate to virtualization and should be 0 on android
             for(String val : vals){
                 try{
                     totalCycles += Integer.parseInt(val);

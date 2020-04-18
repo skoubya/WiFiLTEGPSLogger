@@ -13,8 +13,8 @@ public abstract class LTEPacketData extends SingleDiffFileData {
 
     private String prevSearch;
 
-    public LTEPacketData(String name, Context context){
-        super(name, context);
+    public LTEPacketData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);;
         command = COMMAND;
         prevSearch = "";
         search = "";

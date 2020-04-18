@@ -6,8 +6,8 @@ import android.content.Context;
 public class LTETBData extends LTEPacketData {
     private static int VAL_POS = 8;
 
-    public LTETBData(String name, Context context){
-        super(name, context);
+    public LTETBData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
         valPos = VAL_POS;
     }
 }

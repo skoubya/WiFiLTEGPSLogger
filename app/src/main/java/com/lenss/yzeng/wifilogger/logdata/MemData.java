@@ -9,8 +9,8 @@ import static android.content.Context.ACTIVITY_SERVICE;
 
 /* Retrieves the percentage of the memory used */
 public class MemData extends LogService.LogData {
-    public MemData(String name, Context context){
-        super(name, context);
+    public MemData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
     }
 
     @Override

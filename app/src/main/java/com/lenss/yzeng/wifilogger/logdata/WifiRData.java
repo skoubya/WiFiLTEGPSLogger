@@ -9,8 +9,8 @@ public class WifiRData extends SingleDiffFileData {
     private static String SEARCH = "wlan0:"; //TODO: get wifi name same way as LTE
     private static int VAL_POS = 1;
 
-    public WifiRData(String name, Context context){
-        super(name, context);
+    public WifiRData(String name, Context context, Process rootProc){
+        super(name, context, rootProc);
         command = COMMAND;
         search = SEARCH;
         valPos = VAL_POS;
