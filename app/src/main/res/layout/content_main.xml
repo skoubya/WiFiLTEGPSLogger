@@ -203,6 +203,35 @@
                     app:layout_constraintTop_toBottomOf="@id/lteTBBox"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
+                <CheckBox
+                    android:id="@+id/currBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Battery Current"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scrnOnBox"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/voltBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Battery Voltage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/currBox"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/tempBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Battery Temperature"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/voltBox"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </LinearLayout>
         </ScrollView>

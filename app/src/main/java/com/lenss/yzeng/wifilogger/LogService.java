@@ -178,7 +178,7 @@ public class LogService extends Service {
             this.rootProc = Utils.startRootProcess();
         } catch (IOException e) {
             e.printStackTrace();
-            this.rootProc = null; //TODO: is this correct
+            this.rootProc = null; //TODO: is this correct?
         }
     }
 
@@ -225,7 +225,9 @@ public class LogService extends Service {
         try {
             fout.close();
             out.close();
-            Utils.endRootProcess(this.rootProc);
+            if(this.rootProc != null) {
+                Utils.endRootProcess(this.rootProc);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

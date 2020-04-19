@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.lenss.yzeng.wifilogger.logdata.BatteryData;
 import com.lenss.yzeng.wifilogger.logdata.CPUData;
 import com.lenss.yzeng.wifilogger.logdata.CtxtData;
+import com.lenss.yzeng.wifilogger.logdata.CurrentData;
 import com.lenss.yzeng.wifilogger.logdata.LTERBData;
 import com.lenss.yzeng.wifilogger.logdata.LTERData;
 import com.lenss.yzeng.wifilogger.logdata.LTERPData;
@@ -28,6 +29,8 @@ import com.lenss.yzeng.wifilogger.logdata.LTETData;
 import com.lenss.yzeng.wifilogger.logdata.MemData;
 import com.lenss.yzeng.wifilogger.logdata.ScreenData;
 import com.lenss.yzeng.wifilogger.logdata.ScreenOnData;
+import com.lenss.yzeng.wifilogger.logdata.TemperatureData;
+import com.lenss.yzeng.wifilogger.logdata.VoltageData;
 import com.lenss.yzeng.wifilogger.logdata.WifiFData;
 import com.lenss.yzeng.wifilogger.logdata.WifiRBData;
 import com.lenss.yzeng.wifilogger.logdata.WifiRData;
@@ -63,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
             new CheckboxData(R.id.wifiTBBox, "wifi_tb", WifiTBData.class),
             new CheckboxData(R.id.lteRBBox, "lte_rb", LTERBData.class),
             new CheckboxData(R.id.lteTBBox, "lte_tb", LTETBData.class),
-            new CheckboxData(R.id.scrnOnBox, "scrn_on", ScreenOnData.class)};
+            new CheckboxData(R.id.scrnOnBox, "scrn_on", ScreenOnData.class),
+            new CheckboxData(R.id.currBox, "curr", CurrentData.class),
+            new CheckboxData(R.id.voltBox, "volt", VoltageData.class),
+            new CheckboxData(R.id.tempBox, "temp", TemperatureData.class)};
 
     private class CheckboxData {
         private int checkboxId;
