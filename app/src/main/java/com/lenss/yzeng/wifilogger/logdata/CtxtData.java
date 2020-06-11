@@ -5,7 +5,7 @@ import android.os.Build;
 
 /* Retrieves the number of context switches */
 public class CtxtData extends SingleDiffFileData {
-    private static String[] COMMAND = {"/system/bin/cat", "/proc/stat"};
+    private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.CPU_FILE};
     private static String SEARCH = "ctxt ";
     private static int VAL_POS = 0;
 

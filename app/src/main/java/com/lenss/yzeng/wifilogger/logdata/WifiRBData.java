@@ -5,8 +5,8 @@ import android.os.Build;
 
 /* Retrieve the number of Wifi received bytes */
 public class WifiRBData extends SingleDiffFileData {
-    private static String[] COMMAND = {"/system/bin/cat", "/proc/net/dev"};
-    private static String SEARCH = "wlan0:";
+    private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.NETWORK_FILE};
+    private static String SEARCH = LogConstants.WIFI_SEARCH;
     private static int VAL_POS = 0;
 
     public WifiRBData(String name, Context context, Process rootProc){

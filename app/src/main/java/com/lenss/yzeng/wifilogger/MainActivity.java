@@ -18,7 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lenss.yzeng.wifilogger.logdata.BatteryData;
+import com.lenss.yzeng.wifilogger.logdata.CPUActiveData;
 import com.lenss.yzeng.wifilogger.logdata.CPUData;
+import com.lenss.yzeng.wifilogger.logdata.CPUIdleData;
 import com.lenss.yzeng.wifilogger.logdata.CtxtData;
 import com.lenss.yzeng.wifilogger.logdata.CurrentData;
 import com.lenss.yzeng.wifilogger.logdata.LTERBData;
@@ -69,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
             new CheckboxData(R.id.scrnOnBox, "scrn_on", ScreenOnData.class),
             new CheckboxData(R.id.currBox, "curr", CurrentData.class),
             new CheckboxData(R.id.voltBox, "volt", VoltageData.class),
-            new CheckboxData(R.id.tempBox, "temp", TemperatureData.class)};
+            new CheckboxData(R.id.tempBox, "temp", TemperatureData.class),
+            new CheckboxData(R.id.cpuIBox, "cpu_i", CPUIdleData.class),
+            new CheckboxData(R.id.cpuABox, "cpu_a", CPUActiveData.class)};
 
     private class CheckboxData {
         private int checkboxId;

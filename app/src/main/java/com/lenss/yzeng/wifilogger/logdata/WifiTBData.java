@@ -5,8 +5,8 @@ import android.os.Build;
 
 /* Retrieve the number of Wifi transmitted bytes */
 public class WifiTBData extends SingleDiffFileData {
-    private static String[] COMMAND = {"/system/bin/cat", "/proc/net/dev"};
-    private static String SEARCH = "wlan0:";
+    private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.NETWORK_FILE};
+    private static String SEARCH = LogConstants.WIFI_SEARCH;
     private static int VAL_POS = 8;
 
     public WifiTBData(String name, Context context, Process rootProc){

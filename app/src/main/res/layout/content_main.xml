@@ -233,6 +233,25 @@
                     app:layout_constraintTop_toBottomOf="@id/voltBox"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
+                <CheckBox
+                    android:id="@+id/cpuIBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CPU Idle Cycles"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tempBox"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/cpuABox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CPU Active Cycles"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cpuIBox"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </LinearLayout>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>

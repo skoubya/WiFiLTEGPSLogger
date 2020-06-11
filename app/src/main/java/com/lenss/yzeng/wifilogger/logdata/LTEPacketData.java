@@ -9,7 +9,7 @@ import android.os.Build;
 
 /* Abstract class for accessing transmitted and received data statistics for LTE */
 public abstract class LTEPacketData extends SingleDiffFileData {
-    private static String[] COMMAND = {"/system/bin/cat", "/proc/net/dev"};
+    private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.NETWORK_FILE};
 
     private String prevSearch;
 

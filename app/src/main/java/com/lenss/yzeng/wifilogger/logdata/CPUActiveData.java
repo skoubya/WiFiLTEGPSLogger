@@ -8,16 +8,14 @@ import com.lenss.yzeng.wifilogger.util.Utils;
 
 import java.io.IOException;
 
-/* Retrieves the percent usage of CPU */
-public class CPUData extends LogService.LogData {
+/* Retrieves the number of active cycles */
+public class CPUActiveData extends LogService.LogData {
     private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.CPU_FILE};
-    private long prevTotalCycles;
-    private long prevIdleCycles;
+    private long prevActiveCycles;
 
-    public CPUData(String name, Context context, Process rootProc){
+    public CPUActiveData(String name, Context context, Process rootProc){
         super(name,context, rootProc);
-        prevTotalCycles = -1;
-        prevIdleCycles = -1;
+        prevActiveCycles = -1;
     }
 
     @Override
@@ -38,31 +36,25 @@ public class CPUData extends LogService.LogData {
             boolean cantAccess = row.isEmpty() || vals.length < 11;
 
             if(!cantAccess) {
-                long totalCycles = 0;
-                long idleCycles = 0;
-                int numCount = 0;
-                int idleIndex = 4; //4th number is the idle cycles (index 0 is the word "cpu")
+                long activeCycles = 0;
+                int[] activeIndices = {1,2,3,6,7};
+                //4th number is the idle cycles (index 0 is the word "cpu")
                 // Last 3 values relate to virtualization and should be 0 on android
-                // TODO: the 5th number is the iowait, this should probably be ignored but i haven't in earlier versions
-                for(String val : vals){
+                // the 5th number is the iowait, this should be ignored
+                for(int index : activeIndices){
                     try{
-                        totalCycles += Integer.parseInt(val);
-                        numCount++;
-                        if(numCount == idleIndex){
-                            idleCycles = Integer.parseInt(val);
-                        }
+                        activeCycles += Integer.parseInt(vals[index]);
                     }
                     catch(NumberFormatException e){
                         //just let pass
                     }
                 }
 
-                if (prevTotalCycles != -1 && prevIdleCycles != -1) {
-                    double usage = 1 - (idleCycles - prevIdleCycles) / (double) (totalCycles - prevTotalCycles);
-                    result = Double.toString(usage);
+                if (prevActiveCycles != -1) {
+                    long active = activeCycles - prevActiveCycles;
+                    result = Double.toString(active);
                 }
-                prevTotalCycles = totalCycles;
-                prevIdleCycles = idleCycles;
+                prevActiveCycles = activeCycles;
             }
         }
         catch(IOException e){
