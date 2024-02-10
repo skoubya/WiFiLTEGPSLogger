@@ -3,6 +3,8 @@ package com.lenss.yzeng.wifilogger.logdata;
 import android.content.Context;
 import android.os.Build;
 
+import com.example.system_stats.LogConstants;
+
 /* Collect the number of received Wifi packets */
 public class WifiRData extends SingleDiffFileData {
     private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.NETWORK_FILE};

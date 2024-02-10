@@ -7,6 +7,8 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Build;
 
+import com.example.system_stats.LogConstants;
+
 /* Abstract class for accessing transmitted and received data statistics for LTE */
 public abstract class LTEPacketData extends SingleDiffFileData {
     private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.NETWORK_FILE};

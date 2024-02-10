@@ -3,9 +3,7 @@ package com.lenss.yzeng.wifilogger.wifi;
 import android.net.wifi.ScanResult;
 import android.support.annotation.NonNull;
 
-import com.lenss.yzeng.wifilogger.util.EnumUtils;
-import com.lenss.yzeng.wifilogger.wifi.FrequencyPredicate;
-import com.lenss.yzeng.wifilogger.wifi.model.WiFiBand;
+import com.example.system_stats.util.EnumUtils;
 import com.lenss.yzeng.wifilogger.wifi.model.WiFiWidth;
 
 import java.lang.reflect.Field;

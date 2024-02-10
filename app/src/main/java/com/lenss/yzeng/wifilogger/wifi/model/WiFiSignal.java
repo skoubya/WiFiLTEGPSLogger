@@ -21,7 +21,7 @@ package com.lenss.yzeng.wifilogger.wifi.model;
 import android.support.annotation.NonNull;
 
 
-import com.lenss.yzeng.wifilogger.util.EnumUtils;
+import com.example.system_stats.util.EnumUtils;
 import com.lenss.yzeng.wifilogger.wifi.FrequencyPredicate;
 import com.lenss.yzeng.wifilogger.wifi.WiFiChannel;
 

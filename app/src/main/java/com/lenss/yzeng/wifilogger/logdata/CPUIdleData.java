@@ -3,8 +3,9 @@ package com.lenss.yzeng.wifilogger.logdata;
 import android.content.Context;
 import android.os.Build;
 
+import com.example.system_stats.LogConstants;
 import com.lenss.yzeng.wifilogger.LogService;
-import com.lenss.yzeng.wifilogger.util.Utils;
+import com.example.system_stats.util.Utils;
 
 import java.io.IOException;
 

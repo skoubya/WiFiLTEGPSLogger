@@ -3,6 +3,8 @@ package com.lenss.yzeng.wifilogger.logdata;
 import android.content.Context;
 import android.os.Build;
 
+import com.example.system_stats.LogConstants;
+
 /* Retrieves the number of context switches */
 public class CtxtData extends SingleDiffFileData {
     private static String[] COMMAND = {LogConstants.CAT_PATH, LogConstants.CPU_FILE};

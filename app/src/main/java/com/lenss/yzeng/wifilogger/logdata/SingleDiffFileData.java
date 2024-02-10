@@ -3,7 +3,7 @@ package com.lenss.yzeng.wifilogger.logdata;
 import android.content.Context;
 
 import com.lenss.yzeng.wifilogger.LogService;
-import com.lenss.yzeng.wifilogger.util.Utils;
+import com.example.system_stats.util.Utils;
 
 import java.io.IOException;
 
@@ -27,7 +27,11 @@ public abstract class SingleDiffFileData extends LogService.LogData {
 
         try {
             String row = Utils.searchCommandOutput(command, search, needRoot, rootProc);
+            System.out.println(row);
             String[] vals = row.split("\\s");
+            for (String val : vals){
+                System.out.println(val);
+            }
 
             Long currVal = null;
             int numCount = 0;
@@ -37,12 +41,13 @@ public abstract class SingleDiffFileData extends LogService.LogData {
 
                     if(numCount == valPos) {
                         currVal = iVal;
+                        System.out.println("Chosen value is = " + String.valueOf(iVal));
                         break;
                     }
                     numCount++;
                 }
                 catch(NumberFormatException e){
-                    //just let pass
+                    //just let pass (ignores non-integer values in indices)
                 }
             }
 
@@ -58,6 +63,7 @@ public abstract class SingleDiffFileData extends LogService.LogData {
             e.printStackTrace();
         }
 
+        System.out.println("Result is = " + String.valueOf(result));
         return result;
     }
 }

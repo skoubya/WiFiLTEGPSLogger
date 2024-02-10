@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.lenss.yzeng.wifilogger.util;
+package com.example.system_stats.util;
 
 import android.support.annotation.NonNull;
 

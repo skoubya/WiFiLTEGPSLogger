@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 
 
 import com.lenss.yzeng.wifilogger.R;
-import com.lenss.yzeng.wifilogger.util.EnumUtils;
+import com.example.system_stats.util.EnumUtils;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Predicate;

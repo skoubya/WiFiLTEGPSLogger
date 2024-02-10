@@ -1,1 +1,2 @@
 include ':app'
+include ':system_stats'

@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lenss.yzeng.wifilogger.util.Utils;
+import com.example.system_stats.util.Utils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -159,7 +159,7 @@ public class LogService extends Service {
                     e.printStackTrace();
                 }
                 try{
-                    sleep(interval);
+                    sleep(interval); //TODO(askouby): is there a better way to log over interval?
                 }catch (Exception e){
                     e.printStackTrace();
                     Thread.currentThread().interrupt();

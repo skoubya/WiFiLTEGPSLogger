@@ -21,7 +21,7 @@ package com.lenss.yzeng.wifilogger.wifi;
 import android.support.annotation.NonNull;
 
 
-import com.lenss.yzeng.wifilogger.util.LocaleUtils;
+import com.example.system_stats.util.LocaleUtils;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;

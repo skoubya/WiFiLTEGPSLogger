@@ -1,4 +1,4 @@
-package com.lenss.yzeng.wifilogger.util;
+package com.example.system_stats.util;
 
 import android.Manifest;
 import android.content.Context;
